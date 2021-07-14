@@ -6,10 +6,10 @@ import { environment} from "../../environments/environment";
 import {Categorie, Resultat} from "../visualisation/visualisation.component";
 // @ts-ignore
 import * as url from "url";
-import {Facture} from "../Modeles/facture";
+import {Facture} from "../models/facture";
 import {tryCatch} from "rxjs/internal-compatibility";
 import {ConnexionComponent} from "../connexion/connexion.component";
-import {Categories1} from "../Modeles/categorie";
+import {Categories1} from "../models/categorie";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DATEPICKER_VALIDATORS} from "@angular/material/datepicker";
 import WebViewer from "@pdftron/webviewer";

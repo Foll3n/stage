@@ -50,6 +50,9 @@ import { CongesEnAttenteComponent } from './conges-en-attente/conges-en-attente.
 import { TableCongesComponent } from './visualisation-conges/table-conges/table-conges.component';
 import {MatSliderModule} from "@angular/material/slider";
 import { TableCongesEnAttenteComponent } from './conges-en-attente/table-conges-en-attente/table-conges-en-attente.component';
+import { CompteRenduVueComponent } from './compte-rendu-vue/compte-rendu-vue.component';
+import {CraService} from '../services/cra.service';
+import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
@@ -75,6 +78,8 @@ import { TableCongesEnAttenteComponent } from './conges-en-attente/table-conges-
     CongesEnAttenteComponent,
     TableCongesComponent,
     TableCongesEnAttenteComponent,
+    CompteRenduVueComponent,
+    CompteRenduComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,7 +111,7 @@ import { TableCongesEnAttenteComponent } from './conges-en-attente/table-conges-
     MatCheckboxModule,
   ],
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
-  providers: [],
+  providers: [CraService],
   bootstrap: [AppComponent]
 })
 

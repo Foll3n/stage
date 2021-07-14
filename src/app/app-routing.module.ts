@@ -3,11 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConnexionComponent } from './connexion/connexion.component';
 import { VisualisationComponent } from './visualisation/visualisation.component';
 import { AjouterComponent } from './ajouter/ajouter.component';
-import { UtilisateursComponent } from "./utilisateurs/utilisateurs.component";
-import {VisualisationCongesComponent} from "./visualisation-conges/visualisation-conges.component";
-import {CongesEnAttenteComponent} from "./conges-en-attente/conges-en-attente.component";
+import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
+import {VisualisationCongesComponent} from './visualisation-conges/visualisation-conges.component';
+import {CongesEnAttenteComponent} from './conges-en-attente/conges-en-attente.component';
+import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.component';
 
 const routes: Routes = [
+  { path: 'compte-rendu-vue', component : CompteRenduVueComponent},
   { path: 'connexion', component: ConnexionComponent },
   { path: 'visualisation', component: VisualisationComponent },
   { path: 'ajouter', component: AjouterComponent },
@@ -24,4 +26,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-export const routingComponents = [VisualisationComponent, AjouterComponent, ConnexionComponent, UtilisateursComponent, VisualisationCongesComponent]
+export const routingComponents = [VisualisationComponent, AjouterComponent, ConnexionComponent, UtilisateursComponent, VisualisationCongesComponent, CompteRenduVueComponent];
