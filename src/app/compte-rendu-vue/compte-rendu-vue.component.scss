@@ -1,0 +1,42 @@
+.decalage{
+  margin-left: 10%;
+  margin: 10%;
+}
+.mat-grid-tile {
+  background-color: #5b5c68;
+
+}
+#jour{
+  text-align: center;
+}
+.mat-grid-list {
+
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+  .mat-grid-list>* {
+    flex: 1 1 80px;
+  }
+.elements{
+  margin: auto;
+  margin: 30px;
+
+}
+.jourSemaine{
+  text-align: center;
+  height: 50px;
+}
+.nomSousProjet{
+  height: 100px;
+  padding: 30px;
+  background-color: gray;
+  margin: 10px;
+  
+}
+.colonneJour{
+  border-radius: 10px;
+  background-color: #5b5c68;
+  padding: 10px;
+}

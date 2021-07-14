@@ -1,0 +1,50 @@
+<section class="decalage">
+<p>Bienvenue sur la page décrivant une semaine de cra</p>
+
+
+
+
+  <div class="d-flex flex-row">
+
+    <div class="p-2" id="nomSousProjet" >
+      <div class="d-flex flex-column">
+        <div class="p-2" class="jourSemaine" >
+
+        </div>
+        <div class="p-2" class="nomSousProjet" >
+          <p>test</p>
+        </div>
+        <div class="p-2" class="nomSousProjet">
+          <p>test</p>
+        </div>
+        <div class="p-2" class="nomSousProjet">
+          <p>test</p>
+        </div>
+        </div>
+
+    </div>
+
+
+      <div class="p-2"  *ngFor="let cra of listeCra" >
+
+
+
+
+
+      <div class="d-flex flex-column" class="colonneJour">
+        <div class="p-2" class="jourSemaine" > {{ afficherjour(cra.date.getDay())}} </div>
+        <app-compte-rendu *ngFor="let sp of cra.listeSousProjet ; let i = index"
+                          [duree] = sp.duree
+                          [color] = sp.color
+                          [index]="i"
+                          [idCra]="sp.idCra">
+        </app-compte-rendu>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <button (click)="addSousProjet()">click ici</button>
+</section>
