@@ -53,7 +53,10 @@ import { TableCongesEnAttenteComponent } from './conges-en-attente/table-conges-
 import { CompteRenduVueComponent } from './compte-rendu-vue/compte-rendu-vue.component';
 import {CraService} from '../services/cra.service';
 import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 
+registerLocaleData(localeFr, 'fr');
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 

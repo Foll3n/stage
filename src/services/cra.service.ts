@@ -4,11 +4,19 @@ import {Subject} from 'rxjs';
 import {CR} from '@angular/compiler/src/i18n/serializers/xml_helper';
 import {CompteRendu} from '../app/models/CompteRendu';
 import {HttpClient} from '@angular/common/http';
+import {element} from 'protractor';
+import {getLocaleFirstDayOfWeek} from '@angular/common';
 
 @Injectable()
 export class CraService{
 
+  //date_day = new Date('2021-01-01');
 
+  //date_first = getLocaleFirstDayOfWeek('fr');
+  //date_last = this.date_first + 6;
+  dayDate = new Date();
+  firstDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 1)).toUTCString();
+  lastDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 7)).toUTCString();
 
     listeCr: CompteRendu[] = [
       new CompteRendu(1, 'commande1', 0.1, 'red'),
@@ -37,12 +45,21 @@ export class CraService{
 
   craSubject = new Subject<Cra[]>();
 
-  constructor(private httpClient: HttpClient){}
+  constructor(private httpClient: HttpClient){
+    console.log(">>>>>>>>>>>>>>>>>>"+this.firstDateWeek +" --- " + this.lastDateWeek);
+  }
 
 
   emitCraSubject(){
     this.craSubject.next(this.listeCra.slice());
   }
+addCr(cr: CompteRendu){
+    for (const cra of this.listeCra){
+      cra.listeSousProjet.push(new CompteRendu(cra.idCra, cr.numCommande, cr.duree, cr.color));
+    }
+    this.emitCraSubject();
+
+}
 
   addCra(cra: Cra){
     this.listeCra.push(cra);
@@ -82,14 +99,14 @@ affichercra(){
   }
   editCraDuree(idCra: number, duree: number, indexCr: number){
 
-    console.log('coucou---' + duree+" indexxx :"+"" +" -------->"+ idCra);
+    console.log('coucou---' + duree + ' indexxx :' + '' + ' -------->' + idCra);
     const updateItem = this.listeCra.find(x => x.idCra === idCra);
     // @ts-ignore
 
     if (updateItem instanceof Cra) {
       const index = this.listeCra.indexOf(updateItem);
-         this.listeCra[index].listeSousProjet[indexCr].duree = duree;
-         this.emitCraSubject();
+      this.listeCra[index].listeSousProjet[indexCr].duree = duree;
+      this.emitCraSubject();
     }
 
   }
