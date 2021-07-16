@@ -203,7 +203,7 @@ export class VisualisationComponent implements OnInit {
 
       }
 
-    )
+    );
 
   }
 

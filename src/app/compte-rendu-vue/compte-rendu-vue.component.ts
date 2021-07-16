@@ -30,8 +30,9 @@ export class CompteRenduVueComponent implements OnInit {
 
   addSousProjet(){
     // @ts-ignore
-
-    this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, 'red'));
+    //this.craService.getCraToServer();
+    //this.craService.addCraServer();
+   this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, 'red'));
 
   }
   findIndexToUpdate(cra: Cra) {
@@ -39,7 +40,7 @@ export class CompteRenduVueComponent implements OnInit {
     return cra.idCra === this;
   }
   onSave() {
-    this.craService.saveCraToServer();
+    this.craService.getCraToServer();
   }
   // onFetch() {
   //  this.craService.getCraFromServer();

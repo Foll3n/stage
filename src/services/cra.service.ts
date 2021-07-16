@@ -3,20 +3,29 @@ import {Cra} from '../app/models/Cra';
 import {Subject} from 'rxjs';
 import {CR} from '@angular/compiler/src/i18n/serializers/xml_helper';
 import {CompteRendu} from '../app/models/CompteRendu';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {element} from 'protractor';
-import {getLocaleFirstDayOfWeek} from '@angular/common';
+import {formatDate, getLocaleFirstDayOfWeek} from '@angular/common';
+import {environment} from '../environments/environment';
+import {Utilisateur} from '../app/models/utilisateur';
+import {Reponse} from '../app/utilisateurs/utilisateurs.component';
 
 @Injectable()
 export class CraService{
 
-  //date_day = new Date('2021-01-01');
+  httpOptions = {
+    headers: new HttpHeaders()
+  };
+  // date_day = new Date('2021-01-01');
 
-  //date_first = getLocaleFirstDayOfWeek('fr');
-  //date_last = this.date_first + 6;
+  // date_first = getLocaleFirstDayOfWeek('fr');
+  // date_last = this.date_first + 6;
   dayDate = new Date();
-  firstDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 1)).toUTCString();
-  lastDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 7)).toUTCString();
+  firstDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 1));
+  firstDateWeekFormat = formatDate(this.firstDateWeek, 'yyyy-MM-dd', 'fr');
+  lastDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 7));
+  lastDateWeekFormat = formatDate(this.lastDateWeek, 'yyyy-MM-dd', 'fr');
+
 
     listeCr: CompteRendu[] = [
       new CompteRendu(1, 'commande1', 0.1, 'red'),
@@ -46,7 +55,8 @@ export class CraService{
   craSubject = new Subject<Cra[]>();
 
   constructor(private httpClient: HttpClient){
-    console.log(">>>>>>>>>>>>>>>>>>"+this.firstDateWeek +" --- " + this.lastDateWeek);
+    console.log('>>>>>>>>>>>>>>>>>>' + this.firstDateWeek + ' --- ' + this.lastDateWeek);
+    this.httpOptions.headers = new HttpHeaders({'Content-Type': 'application/json', Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))});
   }
 
 
@@ -110,18 +120,36 @@ affichercra(){
     }
 
   }
-  saveCraToServer() {
-    this.httpClient
-      .put('https://httpclient-demo.firebaseio.com/cra.json', this.listeCr)
-      .subscribe(
-        () => {
-          console.log('Enregistrement terminé !');
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error);
-        }
-      );
+  getCraToServer() {
+    this.httpClient.get(environment.urlCra + '?date_start=' + this.firstDateWeekFormat + '&date_end=' +  this.lastDateWeekFormat + '&id_usr=' + '1', this.httpOptions).subscribe(
+      reponse => {
+            console.log(reponse);
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas !');
+      }
+    );
   }
+
+  addCraServer(){
+    console.log('je rentre bien ici !! ');
+    var listeCraWeek : Cra[] = [];
+    for (let i = 0; i < 5; i++){
+      const cra = new Cra(0, 1, new Date(this.firstDateWeek.getDate() + i), 0, 0, []);
+      listeCraWeek.push(cra);
+    }
+    const json =  JSON.stringify(listeCraWeek) ;
+
+    this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
+      reponse => {
+      console.log(reponse);
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
+
   getListeCraFromServer() {
     this.httpClient
       .get<any[]>('https://httpclient-demo.firebaseio.com/cra.json')

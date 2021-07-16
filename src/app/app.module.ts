@@ -22,7 +22,6 @@ import { RecherchescPipe } from './recherchesc.pipe';
 import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 import { VisualisationCongesComponent } from './visualisation-conges/visualisation-conges.component';
 import { NavComponent } from './nav/nav.component';
-
 //-------------------------------------------------------
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -111,7 +110,7 @@ registerLocaleData(localeFr, 'fr');
     MatSelectModule,
     MatRadioModule,
     MatTabsModule,
-    MatCheckboxModule,
+    MatCheckboxModule
   ],
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   providers: [CraService],
