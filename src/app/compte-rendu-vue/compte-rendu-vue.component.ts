@@ -28,16 +28,16 @@ export class CompteRenduVueComponent implements OnInit {
     this.craService.emitCraSubject();
   }
 
-  addSousProjet(){
+  addSousProjet(){ ///////////////////////////////////////////////
     // @ts-ignore
     //this.craService.getCraToServer();
-    //this.craService.addCraServer();
-   this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, 'red'));
+    this.craService.addCraServer();
+   //this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, 'red'));
 
   }
   findIndexToUpdate(cra: Cra) {
     // @ts-ignore
-    return cra.idCra === this;
+    return cra.id_cra === this;
   }
   onSave() {
     this.craService.getCraToServer();

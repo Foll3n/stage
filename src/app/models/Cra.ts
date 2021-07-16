@@ -2,11 +2,11 @@ import {CompteRendu} from './CompteRendu';
 
 export class Cra {
   constructor(
-    public idCra: number,
-    public idUsr: number,
+    public id_cra: number,
+    public id_usr: number,
     public date: Date,
-    public duree: number,
+    public duree_totale: number,
     public status: number,
-    public listeSousProjet: CompteRendu[]
+    public listeCr: CompteRendu[]
   ) {}
 }

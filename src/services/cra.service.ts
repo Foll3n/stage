@@ -65,7 +65,7 @@ export class CraService{
   }
 addCr(cr: CompteRendu){
     for (const cra of this.listeCra){
-      cra.listeSousProjet.push(new CompteRendu(cra.idCra, cr.numCommande, cr.duree, cr.color));
+      cra.listeCr.push(new CompteRendu(cra.id_cra, cr.numCommande, cr.duree, cr.color));
     }
     this.emitCraSubject();
 
@@ -78,7 +78,7 @@ addCr(cr: CompteRendu){
   getCraById(id: number){
     const cra = this.listeCra.find(
       (craObject) => {
-        return craObject.idCra === id;
+        return craObject.id_cra === id;
       }
     );
     return cra;
@@ -95,10 +95,10 @@ affichercra(){
 }
   findIndexToUpdate(cra: Cra) {
     // @ts-ignore
-    return cra.idCra === this;
+    return cra.id_cra === this;
   }
   editCra(cra: Cra){
-    const updateItem = this.listeCra.find(this.findIndexToUpdate, cra.idCra);
+    const updateItem = this.listeCra.find(this.findIndexToUpdate, cra.id_cra);
     let index = 0;
     if (updateItem instanceof Cra) {
       index = this.listeCra.indexOf(updateItem);
@@ -110,12 +110,12 @@ affichercra(){
   editCraDuree(idCra: number, duree: number, indexCr: number){
 
     console.log('coucou---' + duree + ' indexxx :' + '' + ' -------->' + idCra);
-    const updateItem = this.listeCra.find(x => x.idCra === idCra);
+    const updateItem = this.listeCra.find(x => x.id_cra === idCra);
     // @ts-ignore
 
     if (updateItem instanceof Cra) {
       const index = this.listeCra.indexOf(updateItem);
-      this.listeCra[index].listeSousProjet[indexCr].duree = duree;
+      this.listeCra[index].listeCr[indexCr].duree = duree;
       this.emitCraSubject();
     }
 
@@ -132,22 +132,24 @@ affichercra(){
   }
 
   addCraServer(){
-    console.log('je rentre bien ici !! ');
+    console.log('je rentre bien ici !! post');
     var listeCraWeek : Cra[] = [];
     for (let i = 0; i < 5; i++){
-      const cra = new Cra(0, 1, new Date(this.firstDateWeek.getDate() + i), 0, 0, []);
+      const cra = new Cra(0, 10, new Date(this.firstDateWeek.getDate() + i), 0, 0, []);
       listeCraWeek.push(cra);
+
     }
     const json =  JSON.stringify(listeCraWeek) ;
-
-    this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
-      reponse => {
-      console.log(reponse);
-      },
-      error => {
-        console.log(error + 'le serveur ne répond pas ');
-      }
-    );
+    console.log(json);
+    //
+    // this.httpClient.post(environment.urlCra, listeCraWeek, this.httpOptions).subscribe(
+    //   response => {
+    //   console.log(response);
+    //   },
+    //   error => {
+    //     console.log(error + 'le serveur ne répond pas ');
+    //   }
+    // );
   }
 
   getListeCraFromServer() {
