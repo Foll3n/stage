@@ -1,6 +1,4 @@
-<div class="p-2" class="nomSousProjet" [ngClass]="{'list-group-item' : true,
-'list-group-item-success' : color==='green',
-'list-group-item-danger' : color==='red'}">
+<div class="p-2" class="case" [ngClass]="{'list-group-item' : true}" style="background-color:{{color}}">
 <!--
 <li class="form-class" [ngClass]="{'list-group-item' : true,
 'list-group-item-success' : color==='green',
@@ -12,11 +10,11 @@
 
   <!-- <input type="text" class="form-control"
   [(ngModel)]="appareilName"> -->
-
+  <span (click)="setDureeToOne()" class="badgeAttention" *ngIf="this.duree == 0 && checkDureeTotale()<0.96">Remplir</span>
     <form >
-      <mat-form-field appearance="fill"> <!-- le vert intérieur !-->
+      <mat-form-field color="warn" > <!-- le vert intérieur !-->
         <mat-label>Duree</mat-label>
-        <input type="number" min="0" max="1" step="0.1" matInput maxlength="3" placeholder="0.0" [(ngModel)]="this.duree" (ngModelChange)="onModifyCase()">
+        <input pattern="^d{0,1}$" type="number" min="0" max="1" step="0.1" matInput size="2" maxlength="3" placeholder="0.0" [(ngModel)]="this.dureeString" (ngModelChange)="onModifyCase()">
         <!-- <mat-hint align="start"><strong>Don't disclose personal info</strong> </mat-hint>
          <mat-hint align="end">{{message.value.length}} / 256</mat-hint> -->
       </mat-form-field>

@@ -10,30 +10,41 @@ import {CompteRendu} from '../models/CompteRendu';
   styleUrls: ['./compte-rendu-vue.component.scss']
 })
 export class CompteRenduVueComponent implements OnInit {
-
   constructor(private craService: CraService) { }
 
-
   listeCra: Cra[] | undefined;
-  listeCr: CompteRendu[] | undefined; //rajouter la liste des comptes rendus
 
+
+  listeCr: CompteRendu[] | undefined; // rajouter la liste des comptes rendus
   listeCraSubscription!: Subscription;
+  listeCrSubscription!: Subscription;
 
   ngOnInit(){
     this.listeCraSubscription = this.craService.craSubject.subscribe(
       (listeCra: Cra[]) => this.listeCra = listeCra
     );
-
+    this.listeCrSubscription = this.craService.crSubject.subscribe(
+      (listeCr: CompteRendu[]) => this.listeCr = listeCr
+    );
     console.log('test');
     this.craService.emitCraSubject();
   }
 
   addSousProjet(){ ///////////////////////////////////////////////
     // @ts-ignore
-    //this.craService.getCraToServer();
-    this.craService.addCraServer();
-   //this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, 'red'));
+    // this.craService.getCraToServer();
+    // this.craService.addCraServer();
+   this.craService.addCr(new CompteRendu(0, 'commande_test', 0.0, '#F5F3E0'));
 
+  }
+  push(){
+    this.craService.addCraServer();
+  }
+  test(){
+    this.craService.getCraToServer();
+  }
+  delete(){
+    this.craService.supprimer();
   }
   findIndexToUpdate(cra: Cra) {
     // @ts-ignore
@@ -49,31 +60,9 @@ export class CompteRenduVueComponent implements OnInit {
     this.craService.editCra(cra);
   }
   afficherjour(day: number): string{
-    switch (day){
-      case 0 : {
-        return 'Dimanche';
-      }
-      case 1 : {
-        return 'lundi';
-      }
-      case 2 : {
-        return 'Mardi';
-      }
-      case 3 : {
-        return 'Mercredi';
-      }
-      case 4 : {
-        return 'Jeudi';
-      }
-      case 5 : {
-        return 'Vendredi';
-      }
-      case 6 : {
-        return 'Samedi';
-      }
-      default : {
-        return 'Error';
-      }
-    }
+    return ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][day];
+  }
+  public get width() {
+    return window.innerWidth;
   }
 }

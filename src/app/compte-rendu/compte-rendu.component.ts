@@ -29,6 +29,7 @@ export class CompteRenduComponent implements OnInit {
    // }
    // this.isInsideComponent = false;
  // }
+  dureeString: string = '';
 
   constructor(private craService: CraService) {
 
@@ -51,14 +52,24 @@ export class CompteRenduComponent implements OnInit {
     this.onModifyCase();
   }
   ngOnInit(): void {
+
   }
 
+
+
   onModifyCase(){
-   this.craService.editCraDuree(this.idCra, this.duree, this.index);
+   this.craService.editCraDuree(this.idCra, +this.dureeString, this.index);
+   this.craService.affichercra();
+  }
+  checkDureeTotale(){
+    return this.craService.getDureeTotaleCra(this.idCra);
   }
 
   getColor(){
     return this.color;
   }
-
+  setDureeToOne(){
+    this.dureeString = '1';
+    this.onModifyCase();
+  }
 }

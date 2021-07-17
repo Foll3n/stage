@@ -1,103 +1,70 @@
 import {Injectable} from '@angular/core';
 import {Cra} from '../app/models/Cra';
 import {Subject} from 'rxjs';
-import {CR} from '@angular/compiler/src/i18n/serializers/xml_helper';
 import {CompteRendu} from '../app/models/CompteRendu';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {element} from 'protractor';
 import {formatDate, getLocaleFirstDayOfWeek} from '@angular/common';
 import {environment} from '../environments/environment';
-import {Utilisateur} from '../app/models/utilisateur';
-import {Reponse} from '../app/utilisateurs/utilisateurs.component';
+import {InsertCra} from '../app/models/InsertCra';
+import {CraHttpDatabase} from '../app/configuration/CraHttpDatabase';
 
 @Injectable()
 export class CraService{
-
   httpOptions = {
     headers: new HttpHeaders()
   };
-  // date_day = new Date('2021-01-01');
-
-  // date_first = getLocaleFirstDayOfWeek('fr');
-  // date_last = this.date_first + 6;
   dayDate = new Date();
   firstDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 1));
-  firstDateWeekFormat = formatDate(this.firstDateWeek, 'yyyy-MM-dd', 'fr');
+  public firstDateWeekFormat = formatDate(this.firstDateWeek, 'yyyy-MM-dd', 'fr');
   lastDateWeek = new Date(this.dayDate.setDate(this.dayDate.getDate() - this.dayDate.getDay() + 7));
-  lastDateWeekFormat = formatDate(this.lastDateWeek, 'yyyy-MM-dd', 'fr');
+  public lastDateWeekFormat = formatDate(this.lastDateWeek, 'yyyy-MM-dd', 'fr');
 
-
-    listeCr: CompteRendu[] = [
-      new CompteRendu(1, 'commande1', 0.1, 'red'),
-      new CompteRendu(1, 'commande2', 0.4, 'green')];
-  listeCr1: CompteRendu[] = [
-    new CompteRendu(2, 'commande1', 0.0, 'red'),
-    new CompteRendu(2, 'commande2', 0.5, 'green')];
-  listeCr2: CompteRendu[] = [
-    new CompteRendu(3, 'commande1', 0.6, 'red'),
-    new CompteRendu(3, 'commande2', 0.7, 'green')];
-  listeCr3: CompteRendu[] = [
-    new CompteRendu(4, 'commande1', 0.8, 'red'),
-    new CompteRendu(4, 'commande2', 0.6, 'green')];
-  listeCr4: CompteRendu[] = [
-    new CompteRendu(5, 'commande1', 0.1, 'red'),
-    new CompteRendu(5, 'commande2', 0.9, 'green')];
-
-    private listeCra = [
-        new Cra(1, 1, new Date('2021-01-01'), 0.0, 0, this.listeCr),
-        new Cra(2, 1, new Date('2021-01-02'), 0.0, 0, this.listeCr1),
-        new Cra(3, 1, new Date('2021-01-03'), 0.0, 0, this.listeCr2),
-      new Cra(4, 1, new Date('2021-01-04'), 0.0, 0, this.listeCr3),
-      new Cra(5, 1, new Date('2021-01-05'), 0.0, 0, this.listeCr4),
-    ];
-
-
+  listeCr: CompteRendu[] = [];
+  private listeCra: Cra[] = [];
   craSubject = new Subject<Cra[]>();
+  crSubject = new Subject<CompteRendu[]>();
 
   constructor(private httpClient: HttpClient){
-    console.log('>>>>>>>>>>>>>>>>>>' + this.firstDateWeek + ' --- ' + this.lastDateWeek);
     this.httpOptions.headers = new HttpHeaders({'Content-Type': 'application/json', Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))});
   }
-
-
-  emitCraSubject(){
+  emitCraSubject(): void{
     this.craSubject.next(this.listeCra.slice());
+    this.crSubject.next(this.listeCr.slice());
   }
-addCr(cr: CompteRendu){
+  addCr(cr: CompteRendu): void{
     for (const cra of this.listeCra){
       cra.listeCr.push(new CompteRendu(cra.id_cra, cr.numCommande, cr.duree, cr.color));
     }
-    this.emitCraSubject();
-
-}
-
-  addCra(cra: Cra){
-    this.listeCra.push(cra);
+    this.listeCr.push(cr);
     this.emitCraSubject();
   }
-  getCraById(id: number){
+
+  addCra(cra: Cra): void{
+    this.listeCra.push(cra); this.emitCraSubject();
+  }
+  public getCraById(id: number): Cra{
     const cra = this.listeCra.find(
-      (craObject) => {
-        return craObject.id_cra === id;
-      }
-    );
-    return cra;
+      (craObject) => craObject.id_cra === id);
+    return cra as Cra;
   }
 
-  validUser(){
+  validUser(): void{
     for (const cra of this.listeCra) {
       cra.status = 1;
     }
     this.emitCraSubject();
   }
-affichercra(){
+  getDureeTotaleCra(idCra: number): number{
+    return this.getCraById(idCra).duree_totale;
+  }
+  affichercra(): void{
     console.log(this.listeCra);
-}
-  findIndexToUpdate(cra: Cra) {
+  }
+  findIndexToUpdate(cra: Cra): void {
     // @ts-ignore
     return cra.id_cra === this;
   }
-  editCra(cra: Cra){
+  editCra(cra: Cra): void{
     const updateItem = this.listeCra.find(this.findIndexToUpdate, cra.id_cra);
     let index = 0;
     if (updateItem instanceof Cra) {
@@ -107,63 +74,96 @@ affichercra(){
     this.emitCraSubject();
 
   }
-  editCraDuree(idCra: number, duree: number, indexCr: number){
-
-    console.log('coucou---' + duree + ' indexxx :' + '' + ' -------->' + idCra);
+  editCraDuree(idCra: number, duree: number, indexCr: number): void{
     const updateItem = this.listeCra.find(x => x.id_cra === idCra);
     // @ts-ignore
-
     if (updateItem instanceof Cra) {
       const index = this.listeCra.indexOf(updateItem);
+      const save = this.listeCra[index].listeCr[indexCr].duree;
       this.listeCra[index].listeCr[indexCr].duree = duree;
+      this.listeCra[index].duree_totale = this.listeCra[index].duree_totale - save + duree;
       this.emitCraSubject();
     }
 
   }
-  getCraToServer() {
-    this.httpClient.get(environment.urlCra + '?date_start=' + this.firstDateWeekFormat + '&date_end=' +  this.lastDateWeekFormat + '&id_usr=' + '1', this.httpOptions).subscribe(
-      reponse => {
-            console.log(reponse);
+  // tslint:disable-next-line:variable-name
+  public transform(liste_cra: InsertCra[]): void {
+    this.listeCra = [];
+    for (const cra of liste_cra){
+      const id = +cra.id_cra;
+      const idUsr = +cra.id_usr;
+      const duree = +cra.duree_totale;
+      const status = +cra.status;
+      this.listeCra.push(new Cra(id, idUsr, new Date(cra.date), duree, status, cra.listeCr));
+    }
+  }
+  // tslint:disable-next-line:variable-name
+  public transformToInsertCra(liste_cra: Cra[]): InsertCra[]{
+    const res = [];
+    for (const cra of liste_cra){
+      const id = cra.id_cra.toString();
+      const idUsr = cra.id_usr.toString();
+      const duree = cra.duree_totale.toString();
+      const status = cra.status.toString();
+      res.push(new InsertCra(id, idUsr, formatDate(cra.date, 'yyyy-MM-dd', 'fr'), duree, status, cra.listeCr));
+    }
+    return res;
+  }
+  supprimer(): void{
+    const json =  JSON.stringify(this.transformToInsertCra(this.listeCra));
+    this.httpClient.delete(environment.urlCra, this.httpOptions).subscribe(
+      response => {
+        console.log('suppression -> ' + response);
       },
       error => {
-        console.log(error + 'le serveur ne répond pas !');
+        console.log(error + 'le serveur ne répond pas ');
       }
     );
   }
+  getCraToServer(): void {
+       const craHttp = new CraHttpDatabase(this.httpClient);
+       const response = craHttp.getCra(this.firstDateWeekFormat, this.lastDateWeekFormat, '10');
+       response.subscribe(reponse => {
+            this.transform(reponse.liste_cra);
+            for (const elem of this.listeCra){
+              elem.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
+          new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
+          new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
+              this.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
+                new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
+                new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
+      }
+            this.emitCraSubject();
+    });
+  }
 
-  addCraServer(){
+  addJour(date: Date, nbDays: number): string {
+    const res = new Date(date);
+    res.setDate(res.getDate() + nbDays);
+    return formatDate(res, 'yyyy-MM-dd', 'fr');
+  }
+
+  addCraServer(): void{
     console.log('je rentre bien ici !! post');
-    var listeCraWeek : Cra[] = [];
+    // tslint:disable-next-line:ban-types
+    const listeCraWeek: InsertCra [] = [];
     for (let i = 0; i < 5; i++){
-      const cra = new Cra(0, 10, new Date(this.firstDateWeek.getDate() + i), 0, 0, []);
+      const cra = new InsertCra('0', '10', this.addJour(this.firstDateWeek, i), '0', '0', []);
       listeCraWeek.push(cra);
-
     }
-    const json =  JSON.stringify(listeCraWeek) ;
-    console.log(json);
-    //
-    // this.httpClient.post(environment.urlCra, listeCraWeek, this.httpOptions).subscribe(
+    console.log(listeCraWeek);
+    // const json =  JSON.stringify(listeCraWeek);
+    // console.log(json);
+    // this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
     //   response => {
-    //   console.log(response);
+    //     console.log(response);
     //   },
     //   error => {
     //     console.log(error + 'le serveur ne répond pas ');
     //   }
     // );
+
   }
 
-  getListeCraFromServer() {
-    this.httpClient
-      .get<any[]>('https://httpclient-demo.firebaseio.com/cra.json')
-      .subscribe(
-        (response) => {
-          this.listeCra = response;
-          this.emitCraSubject();
-        },
-        (error) => {
-          console.log('Erreur ! : ' + error);
-        }
-      );
-  }
 
 }

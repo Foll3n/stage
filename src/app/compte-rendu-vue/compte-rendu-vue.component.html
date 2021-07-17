@@ -1,24 +1,18 @@
 <section class="decalage">
-<p>Bienvenue sur la page décrivant une semaine de cra</p>
+<p>Semaine du  au </p>
 
 
+<!--responsive pas la class-->
 
-
-  <div class="d-flex flex-row">
+  <div  [ngClass]="{ 'd-flex flex-row': width >= 768, 'mobile-view': width < 768}">
 
     <div class="p-2" id="nomSousProjet" >
-      <div class="d-flex flex-column">
-        <div class="p-2" class="jourSemaine" >
+      <div class="d-flex flex-column ">
+        <div class="p-2" class="decalageNomProjetHaut" >
+        </div>
+        <div  *ngFor="let cr of listeCr" [ngClass]="{'list-group-item' : true}" [ngClass]="{ 'nomCommande': width >= 768, 'mobile-view': width < 768 }">
+           <div style="background-color:{{cr.color}}"><p>{{ cr.numCommande }} </p></div>
 
-        </div>
-        <div class="p-2" class="nomSousProjet" >
-          <p>test</p>
-        </div>
-        <div class="p-2" class="nomSousProjet">
-          <p>test</p>
-        </div>
-        <div class="p-2" class="nomSousProjet">
-          <p>test</p>
         </div>
         </div>
 
@@ -32,8 +26,11 @@
 
 
       <div class="d-flex flex-column" class="colonneJour">
-        <div class="p-2" class="jourSemaine" > {{ afficherjour(cra.date.getDay())}} </div>
-        <app-compte-rendu *ngFor="let sp of cra.listeSousProjet ; let i = index"
+        <div class="p-2" class="jourSemaine" > <p class="textJour">{{ afficherjour(cra.date.getDay())}}</p> </div>
+        <span class="badge badge-info" *ngIf="cra.duree_totale<0.96">Non complet</span>
+        <span class="badge badge-success" *ngIf="cra.duree_totale>0.96 && cra.duree_totale<1.04">Complet</span>
+        <span class="badge badge-danger" *ngIf="cra.duree_totale>1.04">Invalide</span>
+        <app-compte-rendu *ngFor="let sp of cra.listeCr ; let i = index"
                           [duree] = sp.duree
                           [color] = sp.color
                           [index]="i"
@@ -46,5 +43,9 @@
   </div>
 
 
-  <button (click)="addSousProjet()">click ici</button>
+  <button  mat-raised-button color="primary"(click)="addSousProjet()">add projet</button>
+  <button  mat-raised-button color="primary"(click)="push()">post pas activé</button>
+  <button  mat-raised-button color="primary"(click)="test()">get</button>
+  <button  mat-raised-button color="primary"(click)="delete()">delete</button>
+
 </section>
