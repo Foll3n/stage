@@ -1,16 +1,19 @@
-.decalage{
+.decalage {
   margin-right: 3%;
   margin-top: 3%;
   margin-bottom: 3%;
 
 }
+
 .mat-grid-tile {
   background-color: #5b5c68;
 
 }
-#jour{
+
+#jour {
   text-align: center;
 }
+
 .mat-grid-list {
 
   height: 300px;
@@ -18,35 +21,34 @@
   flex-direction: column;
   flex-wrap: wrap;
 }
-.mat-grid-list>* {
+
+.mat-grid-list > * {
   flex: 1 1 80px;
 }
 
-.jourSemaine{
+.jourSemaine {
   text-align: center;
   height: 50px;
 }
 
-.colonneJour{
+.colonneJour {
   border-radius: 10px;
   background-color: #5b5c68;
   padding: 10px;
 }
-.d-flex flex-column{
+
+.d-flex flex-column {
   vertical-align: middle;
 }
 
 
-
-
-
-
-.case{
+.case {
   height: 100px;
   margin: 10px;
   border-radius: 10px;
 }
-.nomCommande{
+
+.nomCommande {
   height: 100px;
   width: 200px;
   margin-top: 10px;
@@ -55,32 +57,94 @@
   //background-color: red;
 }
 
-.decalageNomProjetHaut{
-  height: 70px;margin: 10px;
+.decalageNomProjetHaut {
+  height: 70px;
+  margin: 10px;
 }
-.jourSemaine{
+
+.jourSemaine {
   text-align: center;
   height: 50px;
   position: relative;
 
 
 }
-.textJour{
+
+.textJour {
   font-size: 30px;
-  color:white;
+  color: white;
 }
 
 @media (400px <= width <= 700px) {
-  #designDays{
+  #designDays {
     display: inline-block;
     height: 60px;
     width: 30px;
   }
-  .mobile-view{
-    display: inline-block;
-    height: 60px;
-    width: 30px;
-  }
+
 
 }
 
+.mobile-view1 {
+  display: inline-block;
+  height: 100px;
+  width: 100px;
+  background-color: red;
+}
+
+
+.nomCommandeResponsive {
+  display: inline-block;
+
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
+  border: 1px;
+
+
+}
+
+.viewCommande {
+  display: none;
+}
+
+.tesst {
+
+}
+
+.jour-actuel {
+  border-bottom: 2px white solid;
+}
+
+.date-jour-afichage {
+  font-size: 32px;
+  margin: 10px;
+}
+
+.info-semaine {
+  font-size: 20px;
+  margin: 10px;
+  display: inline-block;
+
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
+  border: 1px;
+}
+
+.add-commande {
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  position: absolute;
+  right: 5%;
+  z-index: 100;
+}
+
+add-commande-responsive {
+
+  padding: 10px;
+  margin: 1000px;
+
+
+}

@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CraService} from '../../services/cra.service';
 
 @Component({
@@ -10,25 +10,12 @@ export class CompteRenduComponent implements OnInit {
   @Input()
   duree!: number;
   @Input()
-  color!: string ;
+  color!: string;
   @Input()
   index!: number;
   @Input()
   idCra!: number;
   isInsideComponent = false;
- // @HostListener('click')
- // clickInside() {
- //   this.isInsideComponent = true;
- // }
-
-  //@HostListener('document:click')
-  //clickout() {
-   // if (!this.isInsideComponent) {
-    //  this.onModifyCase();
-     // console.log(this.craService.listeCr);
-   // }
-   // this.isInsideComponent = false;
- // }
   dureeString: string = '';
 
   constructor(private craService: CraService) {
@@ -36,39 +23,41 @@ export class CompteRenduComponent implements OnInit {
   }
 
   //ngOnChanges(changes: SimpleChanges) {
-    //for (const prop in changes){
-      //if (changes.hasOwnProperty(prop)){
-        //switch (prop){
-          //case 'duree': {
-            //console.log('la durée a été changé');
-          //}
-        //}
-      //}
-    //}
-    //console.log('je change');
+  //for (const prop in changes){
+  //if (changes.hasOwnProperty(prop)){
+  //switch (prop){
+  //case 'duree': {
+  //console.log('la durée a été changé');
+  //}
+  //}
+  //}
+  //}
+  //console.log('je change');
   //}
 
-  supprimer(){
+  supprimer() {
     this.onModifyCase();
   }
+
   ngOnInit(): void {
 
   }
 
 
-
-  onModifyCase(){
-   this.craService.editCraDuree(this.idCra, +this.dureeString, this.index);
-   this.craService.affichercra();
+  onModifyCase() {
+    this.craService.editCraDuree(this.idCra, +this.dureeString, this.index);
+    this.craService.affichercra();
   }
-  checkDureeTotale(){
+
+  checkDureeTotale() {
     return this.craService.getDureeTotaleCra(this.idCra);
   }
 
-  getColor(){
+  getColor() {
     return this.color;
   }
-  setDureeToOne(){
+
+  setDureeToOne() {
     this.dureeString = '1';
     this.onModifyCase();
   }

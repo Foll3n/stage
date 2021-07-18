@@ -1,51 +1,71 @@
 <section class="decalage">
-<p>Semaine du  au </p>
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+<!--div qui afiche le jour actuel la date et le bouton permettant d'ajouter une commande-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
+  <div>
+    <p class="date-jour-afichage">{{this.getDateToday()}}</p>
+    <p class="info-semaine">Semaine du {{getFirstDayWeek()}}  au {{getLastDayWeek()}} </p>
+    <button (click)="addSousProjet()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }"
+            color="primary" mat-raised-button>add projet
+    </button>
+<!--    <select class="form-control input-sm">-->
+<!--      <optgroup *ngFor="let family of families"-->
+<!--                label= {{family}} >-->
+<!--        <ng-container *ngFor="let thing of animals" >-->
+<!--          <option *ngIf="thing.family === family" value={{thing.id}}>-->
+<!--            {{thing.name}}-->
+<!--          </option>-->
+<!--        </ng-container>-->
+<!--      </optgroup>-->
+<!--    </select>-->
+  </div>
 
-<!--responsive pas la class-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+<!--affiche chaque commande de facon responsive en haut de la page-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-  <div  [ngClass]="{ 'd-flex flex-row': width >= 768, 'mobile-view': width < 768}">
+  <div *ngFor="let cr of listeCr" [ngClass]="{ 'viewCommande': width >= 768, 'nomCommandeResponsive': width < 768 }"
+       style="background-color:{{cr.color}}">
+    <p>{{ cr.numCommande }} </p>
+  </div>
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+<!--  affiche chaque compte rendu pour chaque cra en passant la main à la vue compte-rendu-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-    <div class="p-2" id="nomSousProjet" >
+  <div [ngClass]="{ 'd-flex flex-row': width >= 768, 'mobile-view': width < 768}">
+    <div class="p-2" id="nomSousProjet">
       <div class="d-flex flex-column ">
-        <div class="p-2" class="decalageNomProjetHaut" >
+        <div [ngClass]="{ 'decalageNomProjetHaut': width >= 768, 'viewCommande': width < 768 }" class="p-2">
         </div>
-        <div  *ngFor="let cr of listeCr" [ngClass]="{'list-group-item' : true}" [ngClass]="{ 'nomCommande': width >= 768, 'mobile-view': width < 768 }">
-           <div style="background-color:{{cr.color}}"><p>{{ cr.numCommande }} </p></div>
+        <div *ngFor="let cr of listeCr" [ngClass]="{'list-group-item' : true}"
+             [ngClass]="{ 'nomCommande': width >= 768, 'viewCommande': width < 768 }"
+             style="background-color:{{cr.color}}">
+          <p>{{ cr.numCommande }} </p>
 
         </div>
-        </div>
-
+      </div>
     </div>
-
-
-      <div class="p-2"  *ngFor="let cra of listeCra" >
-
-
-
-
-
+    <div *ngFor="let cra of listeCra" class="p-2">
       <div class="d-flex flex-column" class="colonneJour">
-        <div class="p-2" class="jourSemaine" > <p class="textJour">{{ afficherjour(cra.date.getDay())}}</p> </div>
-        <span class="badge badge-info" *ngIf="cra.duree_totale<0.96">Non complet</span>
-        <span class="badge badge-success" *ngIf="cra.duree_totale>0.96 && cra.duree_totale<1.04">Complet</span>
-        <span class="badge badge-danger" *ngIf="cra.duree_totale>1.04">Invalide</span>
+        <div class="p-2" class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate()-2}"
+                                                class="textJour">{{ afficherjour(cra.date.getDay())}}</p>
+        </div>
+        <span *ngIf="cra.duree_totale<0.96" class="badge badge-info">Non complet</span>
+        <span *ngIf="cra.duree_totale>0.96 && cra.duree_totale<1.04" class="badge badge-success">Complet</span>
+        <span *ngIf="cra.duree_totale>1.04" class="badge badge-danger">Invalide</span>
         <app-compte-rendu *ngFor="let sp of cra.listeCr ; let i = index"
-                          [duree] = sp.duree
-                          [color] = sp.color
-                          [index]="i"
-                          [idCra]="sp.idCra">
+                          [color]=sp.color
+                          [duree]=sp.duree
+                          [idCra]="sp.idCra"
+                          [index]="i">
         </app-compte-rendu>
-
       </div>
     </div>
 
   </div>
-
-
-  <button  mat-raised-button color="primary"(click)="addSousProjet()">add projet</button>
-  <button  mat-raised-button color="primary"(click)="push()">post pas activé</button>
-  <button  mat-raised-button color="primary"(click)="test()">get</button>
-  <button  mat-raised-button color="primary"(click)="delete()">delete</button>
+  <button (click)="test()" class="getTest" color="primary" mat-raised-button>get</button>
+  <button (click)="push()" color="primary" mat-raised-button>post pas activé</button>
+  <button (click)="delete()" color="primary" mat-raised-button>delete</button>
 
 </section>
