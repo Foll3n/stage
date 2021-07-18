@@ -7,9 +7,10 @@ import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 import {VisualisationCongesComponent} from './visualisation-conges/visualisation-conges.component';
 import {CongesEnAttenteComponent} from './conges-en-attente/conges-en-attente.component';
 import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.component';
+import {CompteRenduActiviteComponent} from './compte-rendu-activite/compte-rendu-activite.component';
 
 const routes: Routes = [
-  { path: 'compte-rendu-vue', component : CompteRenduVueComponent},
+  { path: 'compte-rendu-activite', component : CompteRenduActiviteComponent},
   { path: 'connexion', component: ConnexionComponent },
   { path: 'visualisation', component: VisualisationComponent },
   { path: 'ajouter', component: AjouterComponent },

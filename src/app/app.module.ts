@@ -54,6 +54,7 @@ import {CraService} from '../services/cra.service';
 import { CompteRenduComponent } from './compte-rendu/compte-rendu.component';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { CompteRenduActiviteComponent } from './compte-rendu-activite/compte-rendu-activite.component';
 
 registerLocaleData(localeFr, 'fr');
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
@@ -82,6 +83,7 @@ registerLocaleData(localeFr, 'fr');
     TableCongesEnAttenteComponent,
     CompteRenduVueComponent,
     CompteRenduComponent,
+    CompteRenduActiviteComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,73 @@
+<section class="decalage">
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+  <!--div qui afiche le jour actuel la date et le bouton permettant d'ajouter une commande-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+
+  <div>
+    <p class="date-jour-afichage">{{this.getDateToday()}}</p>
+    <p class="info-semaine">Semaine du {{this.firstDate}}  au {{this.lastDate}} </p>
+    <button (click)="addSousProjet()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }"
+            color="primary" mat-raised-button>add projet
+    </button>
+    <!--    <select class="form-control input-sm">-->
+    <!--      <optgroup *ngFor="let family of families"-->
+    <!--                label= {{family}} >-->
+    <!--        <ng-container *ngFor="let thing of animals" >-->
+    <!--          <option *ngIf="thing.family === family" value={{thing.id}}>-->
+    <!--            {{thing.name}}-->
+    <!--          </option>-->
+    <!--        </ng-container>-->
+    <!--      </optgroup>-->
+    <!--    </select>-->
+  </div>
+
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+  <!--affiche chaque commande de facon responsive en haut de la page-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+
+  <div *ngFor="let cr of listeCr" [ngClass]="{ 'viewCommande': width >= 768, 'nomCommandeResponsive': width < 768 }"
+       style="background-color:{{cr.color}}">
+    <p>{{ cr.numCommande }} </p>
+  </div>
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+  <!--  affiche chaque compte rendu pour chaque cra en passant la main à la vue compte-rendu-->
+  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+<!--  <a class="carousel-control-prev"  role="button" data-slide="prev">-->
+<!--    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
+<!--    <span class="sr-only">Previous</span>-->
+<!--  </a>-->
+<!--  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">-->
+<!--    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
+<!--    <span class="sr-only">Next</span>-->
+<!--  </a>-->
+
+<!--  </div>-->
+  <div class='col-12'>
+    <ngb-carousel  #selectedWeek activeId="1" *ngIf="selectedWeek==0 " (slide)="onSlide($event)">
+          ---------------- {{selectedWeek}}-----------------
+
+
+<!--      <div class="carousel-item active">-->
+<!--        <img class="d-block w-100" src="..." alt="First slide">-->
+<!--      </div>-->
+              <ng-template ngbSlide id='0' >
+
+                <app-compte-rendu-vue [listeCra]="this.craWeek[0].listeCra" [index]="0" *ngIf="this.craWeek[0].listeCra.length != 0"></app-compte-rendu-vue>
+              </ng-template>
+      <ng-template ngbSlide id='1' >
+              <app-compte-rendu-vue [listeCra]="this.craWeek[1].listeCra" [index]="1" *ngIf="this.craWeek[1].listeCra.length != 0"></app-compte-rendu-vue>
+      </ng-template>
+      <ng-template ngbSlide id='2' >
+              <app-compte-rendu-vue [listeCra]="this.craWeek[2].listeCra" [index]="2" *ngIf="this.craWeek[2].listeCra.length != 0"></app-compte-rendu-vue>
+  </ng-template>
+
+    </ngb-carousel>
+
+  </div>
+
+
+
+  <button (click)="push()" color="primary" mat-raised-button>post pas activé</button>
+  <button (click)="delete()" color="primary" mat-raised-button>delete</button>
+
+</section>

@@ -1,37 +1,7 @@
-<section class="decalage">
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
-<!--div qui afiche le jour actuel la date et le bouton permettant d'ajouter une commande-->
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-  <div>
-    <p class="date-jour-afichage">{{this.getDateToday()}}</p>
-    <p class="info-semaine">Semaine du {{getFirstDayWeek()}}  au {{getLastDayWeek()}} </p>
-    <button (click)="addSousProjet()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }"
-            color="primary" mat-raised-button>add projet
-    </button>
-<!--    <select class="form-control input-sm">-->
-<!--      <optgroup *ngFor="let family of families"-->
-<!--                label= {{family}} >-->
-<!--        <ng-container *ngFor="let thing of animals" >-->
-<!--          <option *ngIf="thing.family === family" value={{thing.id}}>-->
-<!--            {{thing.name}}-->
-<!--          </option>-->
-<!--        </ng-container>-->
-<!--      </optgroup>-->
-<!--    </select>-->
-  </div>
 
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
-<!--affiche chaque commande de facon responsive en haut de la page-->
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-  <div *ngFor="let cr of listeCr" [ngClass]="{ 'viewCommande': width >= 768, 'nomCommandeResponsive': width < 768 }"
-       style="background-color:{{cr.color}}">
-    <p>{{ cr.numCommande }} </p>
-  </div>
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
-<!--  affiche chaque compte rendu pour chaque cra en passant la main à la vue compte-rendu-->
-  <!--  -------------------------------------------------------------------------------------------------------------------------------------->
+
 
   <div [ngClass]="{ 'd-flex flex-row': width >= 768, 'mobile-view': width < 768}">
     <div class="p-2" id="nomSousProjet">
@@ -42,7 +12,6 @@
              [ngClass]="{ 'nomCommande': width >= 768, 'viewCommande': width < 768 }"
              style="background-color:{{cr.color}}">
           <p>{{ cr.numCommande }} </p>
-
         </div>
       </div>
     </div>
@@ -58,14 +27,15 @@
                           [color]=sp.color
                           [duree]=sp.duree
                           [idCra]="sp.idCra"
-                          [index]="i">
+                          [index]="i"
+                          [indexWeek]="this.index">
         </app-compte-rendu>
       </div>
     </div>
 
   </div>
-  <button (click)="test()" class="getTest" color="primary" mat-raised-button>get</button>
-  <button (click)="push()" color="primary" mat-raised-button>post pas activé</button>
-  <button (click)="delete()" color="primary" mat-raised-button>delete</button>
 
-</section>
+
+
+
+

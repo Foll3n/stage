@@ -15,6 +15,8 @@ export class CompteRenduComponent implements OnInit {
   index!: number;
   @Input()
   idCra!: number;
+  @Input()
+  indexWeek!: number;
   isInsideComponent = false;
   dureeString: string = '';
 
@@ -45,12 +47,13 @@ export class CompteRenduComponent implements OnInit {
 
 
   onModifyCase() {
-    this.craService.editCraDuree(this.idCra, +this.dureeString, this.index);
-    this.craService.affichercra();
+
+    this.craService.editCraDuree(this.idCra, +this.dureeString, this.index, this.indexWeek);
+    this.craService.getCraById(this.idCra, this.indexWeek);
   }
 
   checkDureeTotale() {
-    return this.craService.getDureeTotaleCra(this.idCra);
+    return this.craService.getDureeTotaleCra(this.idCra, this.indexWeek);
   }
 
   getColor() {
@@ -58,7 +61,8 @@ export class CompteRenduComponent implements OnInit {
   }
 
   setDureeToOne() {
-    this.dureeString = '1';
+    const duree = this.craService.getDureeTotaleCra(this.idCra, this.indexWeek);
+    this.dureeString = (1 - duree).toPrecision(1).toString();
     this.onModifyCase();
   }
 }
