@@ -1,6 +1,7 @@
 import {CompteRendu} from './CompteRendu';
 import {Cra} from './Cra';
 import {formatDate} from '@angular/common';
+import {CommandeInsert} from './CommandeInsert';
 
 
 export class CraWeek {
@@ -14,6 +15,7 @@ export class CraWeek {
   public lastDate: string;
   public firstDate: string;
   public id: number;
+  public listeCommandesWeek: CommandeInsert[] = [];
 
   constructor(id: number, dateDay: Date) {
     this.id = id;
@@ -30,5 +32,19 @@ export class CraWeek {
 
   setListeCra(listeCra: Cra[]): void{
     this.listeCra = listeCra;
+  }
+  setListeCom(listeCommande: CommandeInsert[]): void{
+    this.listeCommandesWeek = listeCommande;
+  }
+  addCom(commande: CommandeInsert): void{
+    this.listeCommandesWeek.push(commande);
+  }
+
+  afficher(){
+    console.log('----------- CRA-----------\n');
+    console.log('liste cra : ' + this.listeCra);
+    for (const i of this.listeCra){
+      console.log('cra : ' + i.id_cra + ' duree : ' + i.duree_totale +" liste CR len "+i.listeCr.length);
+    }
   }
 }

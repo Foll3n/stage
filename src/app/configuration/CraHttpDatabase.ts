@@ -3,6 +3,7 @@ import { Observable} from 'rxjs';
 import { environment} from '../../environments/environment';
 import { InsertCra} from '../models/InsertCra';
 import {Big} from '../models/Big';
+import {CompteRenduInsert} from '../models/CompteRenduInsert';
 
 export class CraHttpDatabase{
   httpOptions = {
@@ -25,5 +26,12 @@ export class CraHttpDatabase{
     const href = environment.urlCra;
     // tslint:disable-next-line:max-line-length
     this._httpClient.post(href, json, this.httpOptions);
+  }
+  putCr(listCr: CompteRenduInsert[]){
+    const json =  JSON.stringify(listCr);
+    console.log("je suis ici");
+    const href = environment.urlCr;
+    // tslint:disable-next-line:max-line-length
+    this._httpClient.put(href, json, this.httpOptions);
   }
 }

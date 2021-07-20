@@ -10,7 +10,10 @@ export const environment = {
   urlUtilisateurs:'http://5.196.8.160:4000/gateway/APIUtilisateurs/1.0/utilisateurs',
   urlConnexion: 'http://5.196.8.160:4000/gateway/APIConnexion/1.0/connexion',
   urlCra: 'http://5.196.8.160:4000/gateway/APICra/1.0/cra',
-  urlCr: 'http://5.196.8.160:4000/gateway/APICr/1.0/cr'
+  urlCr: 'http://5.196.8.160:4000/gateway/APICr/1.0/cr',
+  urlCommande : 'http://5.196.8.160:4000/gateway/APICommande/1.0/commande',
+  urlProjet: 'http://5.196.8.160:4000/gateway/APIProjet/1.0/projet',
+  urlRealisation :'http://5.196.8.160:4000/gateway/APIRealisation/1.0/realisation'
 };
 
 /*

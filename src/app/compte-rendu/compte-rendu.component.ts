@@ -17,6 +17,10 @@ export class CompteRenduComponent implements OnInit {
   idCra!: number;
   @Input()
   indexWeek!: number;
+  @Input()
+  nomSp!: string;
+  @Input()
+  status!: number;
   isInsideComponent = false;
   dureeString: string = '';
 
@@ -42,7 +46,11 @@ export class CompteRenduComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    console.log(">Wwwwwwwwwwwwwwwwwwwww " + this.index, +" "+ this.duree + "   " );
+      this.dureeString = this.duree.toString();
+      if (this.dureeString == '0'){
+        this.dureeString = '' ;
+      }
   }
 
 

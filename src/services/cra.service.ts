@@ -8,12 +8,15 @@ import {environment} from '../environments/environment';
 import {InsertCra} from '../app/models/InsertCra';
 import {CraHttpDatabase} from '../app/configuration/CraHttpDatabase';
 import {CraWeek} from '../app/models/craWeek';
+import {CompteRenduInsert} from '../app/models/CompteRenduInsert';
+import {CommandeInsert} from '../app/models/CommandeInsert';
+import {BigCommande} from '../app/models/BigCommande';
 
 @Injectable()
 export class CraService {
   nb = 0;
   constructor(private httpClient: HttpClient) {
-
+    this.dateDay = new Date();
 
 
 
@@ -21,30 +24,32 @@ export class CraService {
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))
     });
-
+    console.log('first' + this.craWeek.toString());
+    console.log('first' + this.craWeek.toString());
     this.listeCraWeek.push(this.craWeekLast);
     this.listeCraWeek.push(this.craWeek);
     this.listeCraWeek.push(this.craWeekNext);
-
-    console.log(this.listeCraWeek);
     this.fillWeeks();
-    console.log("--->"+this.listeCraWeek);
+    console.log("llllll lll lll lll "+ this.listeCraWeek);
+
+
+
+
   }
   httpOptions = {
     headers: new HttpHeaders()
   };
 
   dateDay = new Date();
-
+  dateToday = new Date();
   listeCraWeek: CraWeek[] = [];
   craWeekLast: CraWeek = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
   craWeek: CraWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
   craWeekNext: CraWeek = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
 
 
-  public listeCr: CompteRendu[] = [];
+  public listeCommandes: CommandeInsert[] = [];
   craSubject = new Subject<CraWeek[]>();
-  crSubject = new Subject<CompteRendu[]>();
   private listeCra: Cra[] = [];
 
 
@@ -52,20 +57,23 @@ export class CraService {
 
   emitCraSubject(): void {
     // tslint:disable-next-line:triple-equals
-        console.log('>>>>>>>>>>>>>>>>>>>' + this.listeCraWeek + '<<<<<<<<<<<<<<<<<<<');
         this.craSubject.next(this.listeCraWeek.slice());
-
-
-        this.crSubject.next(this.listeCr.slice());
   }
 
-
-  addCr(cr: CompteRendu, index: number): void {
+  getDateToday(){
+    return formatDate(this.dateToday, 'dd MMMM yyyy', 'fr');
+  }
+  addCr(cr: CompteRendu, index: number, commande: CommandeInsert): void {
+    const listeCr = [];
     for (const cra of this.listeCraWeek[index].listeCra) {
-      cra.listeCr.push(new CompteRendu(cra.id_cra, cr.numCommande, cr.duree, cr.color));
+      const compteRendu = new CompteRendu(cra.id_cra, cr.numCommande, cr.duree, cr.color);
+      cra.listeCr.push(compteRendu);
+      listeCr.push(compteRendu);
+
     }
-    this.listeCr.push(cr);
-    this.emitCraSubject();
+    this.addCraLine(index, listeCr, commande);
+
+
   }
 
   addCra(cra: Cra, index: number): void {
@@ -127,12 +135,20 @@ export class CraService {
   public transform(liste_cra: InsertCra[], index: number): void {
     this.listeCraWeek[index].listeCra = [];
     for (const cra of liste_cra) {
+
       const id = +cra.id_cra;
       const idUsr = +cra.id_usr;
       const duree = +cra.duree_totale;
       const status = +cra.status;
-      this.listeCraWeek[index].listeCra.push(new Cra(id, idUsr, new Date(cra.date), duree, status, cra.listeCr));
+      const listCr = [];
+      if (cra.listeCr != null){
+        for (const sp of cra.listeCr){
+          listCr.push(new CompteRendu(id, sp.id_commande, +sp.duree, sp.color));
+        }
+      }
+      this.listeCraWeek[index].listeCra.push(new Cra(id, idUsr, new Date(cra.date), duree, status, listCr));
     }
+
   }
 
   // tslint:disable-next-line:variable-name
@@ -143,7 +159,11 @@ export class CraService {
       const idUsr = cra.id_usr.toString();
       const duree = cra.duree_totale.toString();
       const status = cra.status.toString();
-      res.push(new InsertCra(id, idUsr, formatDate(cra.date, 'yyyy-MM-dd', 'fr'), duree, status, cra.listeCr));
+      const listCr = [];
+      for (const sp of cra.listeCr){
+        listCr.push(new CompteRenduInsert(id, sp.numCommande, duree, sp.color));
+      }
+      res.push(new InsertCra(id, idUsr, formatDate(cra.date, 'yyyy-MM-dd', 'fr'), duree, status, listCr));
     }
     return res;
   }
@@ -166,29 +186,94 @@ export class CraService {
     );
   }
 
+  addCraLine(index: number, listeCompteRendu: CompteRendu[], commande: CommandeInsert){
+    console.log('Ajout d une ligne dans le serveur');
+    // tslint:disable-next-line:ban-types
+    const listeCompte: CompteRenduInsert [] = [];
+
+    for (const cr of listeCompteRendu){
+      listeCompte.push(new CompteRenduInsert(cr.idCra.toString(), cr.numCommande, '0.0', cr.color));
+    }
+    const json =  JSON.stringify(listeCompte);
+    console.log(json);
+    this.httpClient.post(environment.urlCr, json, this.httpOptions).subscribe(
+      response => {
+        console.log(response);
+       // this.getDistinctCommandsWeek(index);
+        if (this.listeCraWeek[index].listeCommandesWeek){
+          this.listeCraWeek[index].addCom(commande); ///////////////////////////////////////////////////////////////////////////////
+        }
+        else{
+          this.listeCraWeek[index].setListeCom([commande]);
+        }
+        this.emitCraSubject();
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
+
   getCraToServer(index: number): void {
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCra(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
     response.subscribe(reponse => {
-      this.transform(reponse.liste_cra, index);
-      for (const elem of this.listeCraWeek[index].listeCra) {
-        elem.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
-          new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
-          new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
-        this.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
-          new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
-          new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
+      console.log(reponse);
+      if (reponse.liste_cra != null && reponse.liste_cra.length > 0){
+
+        this.transform(reponse.liste_cra, index);
+        // for (const elem of this.listeCraWeek[index].listeCra) {
+        //   elem.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
+        //     new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
+        //     new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
+        //   this.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
+        //     new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
+        //     new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
+        // }
+        // this.emitCraSubject();
+      }else{
+            this.addCraServer(index);
       }
-      this.emitCraSubject();
+      this.getDistinctCommandsWeek(index);
     });
   }
-
+  getDistinctCommandsWeek(index: number): void{
+    const requestUrl = environment.urlCommande + '/' + this.listeCraWeek[index].firstDateWeekFormat + '/' + this.listeCraWeek[index].lastDateWeekFormat + '/' + '10' ;
+    this.httpClient.get<BigCommande>(requestUrl, this.httpOptions).subscribe(
+      response => {
+        this.listeCraWeek[index].listeCommandesWeek = response.listeCommande;
+        // this.getCraToServer(index); // patch car je reload tout le serveur
+        this.emitCraSubject();
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
   addJour(date: Date, nbDays: number): string {
     const res = new Date(date);
     res.setDate(res.getDate() + nbDays);
     return formatDate(res, 'yyyy-MM-dd', 'fr');
   }
-
+  saveCra(index: number){
+    console.log('je passe bien ici');
+    const send: CompteRenduInsert[] = [];
+    for (const cra of this.listeCraWeek[index].listeCra){
+      for (const cr of cra.listeCr){
+        send.push(new CompteRenduInsert(cr.idCra.toString(), cr.numCommande.toString(), cr.duree.toString(), cr.color));
+      }
+    }
+    console.log(send);
+    const json =  JSON.stringify(send);
+    this.httpClient.put(environment.urlCr, json, this.httpOptions).subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
   addCraServer(index: number): void {
     console.log('je rentre bien ici !! post');
     // tslint:disable-next-line:ban-types
@@ -198,25 +283,22 @@ export class CraService {
       const cra = new InsertCra(this.nb.toString(), '10', this.addJour(this.listeCraWeek[index].firstDateWeek, i), '0', '0', []);
       listeCraWeek.push(cra);
     }
-    console.log(listeCraWeek);
-    // const json =  JSON.stringify(listeCraWeek);
-    // console.log(json);
-    // this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
-    //   response => {
-    //     console.log(response);
-    //   },
-    //   error => {
-    //     console.log(error + 'le serveur ne répond pas ');
-    //   }
-    // );
-
+    const json =  JSON.stringify(listeCraWeek);
+    console.log(json);
+    this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
   }
 
   fillWeeks(){
-
-    this.getCraToServer( 0);
-    this.getCraToServer( 1);
-    this.getCraToServer(2);
+  this.getCraToServer( 0);
+  this.getCraToServer( 1);
+  this.getCraToServer(2);
 
     // this.selectedWeek = this.craWeekNext;
     // this.listeCra = this.selectedWeek.listeCra;
@@ -234,5 +316,52 @@ export class CraService {
       craWeek.listeCra.push(cra);
     }
     this.emitCraSubject();
+  }
+  deleteLineToServer(commande: CommandeInsert, index: number){
+    console.log("ooooooooooooooooo ooooooooo "+ commande.id);
+    const requestUrl = environment.urlCr +'?commande=' + commande.id + '&date_start=' + this.listeCraWeek[index].firstDateWeekFormat + '&date_end=' + this.listeCraWeek[index].lastDateWeekFormat  + '&id_usr=' + '10' ;
+    this.httpClient.delete(requestUrl, this.httpOptions).subscribe(
+      response => {
+        console.log(response);
+        this.deleteLine(commande, index);
+        this.emitCraSubject();
+      },
+      error => {
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
+  setStatusUserToServer(index: number){
+    console.log('je passe bien ici dans l update de status');
+    const json =  JSON.stringify(this.transformToInsertCra(this.listeCraWeek[index].listeCra));
+    console.log(json);
+    this.httpClient.put(environment.urlCra, json, this.httpOptions).subscribe(
+      response => {
+        console.log("probleme de status a jour" + response);
+      },
+      error => {
+       // this.setStatusUser(index, 0); // s'il y a une erreur je remet le status a 0
+        console.log(error + 'le serveur ne répond pas ');
+      }
+    );
+  }
+  setStatusUser(index: number, status: number){
+    for (const cra of this.listeCraWeek[index].listeCra){
+      cra.status = status;
+      console.log("cra : ", cra.status);
+    }
+  }
+  deleteLine(commande: CommandeInsert, index: number){
+    for (const cra of this.listeCraWeek[index].listeCra){
+      for (const cr of cra.listeCr){
+        // tslint:disable-next-line:triple-equals
+        if (cr.numCommande == commande.id){
+          const ind =  cra.listeCr.indexOf(cr, 0);
+          cra.listeCr.splice(ind, 1);
+        }
+      }
+    }
+    const comToDelete = this.listeCraWeek[index].listeCommandesWeek.indexOf(commande);
+    this.listeCraWeek[index].listeCommandesWeek.splice(comToDelete, 1);
   }
 }

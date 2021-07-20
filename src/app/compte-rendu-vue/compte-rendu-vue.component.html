@@ -8,17 +8,21 @@
       <div class="d-flex flex-column ">
         <div [ngClass]="{ 'decalageNomProjetHaut': width >= 768, 'viewCommande': width < 768 }" class="p-2">
         </div>
-        <div *ngFor="let cr of listeCr" [ngClass]="{'list-group-item' : true}"
+        <div *ngFor="let com of this.listeCommande" [ngClass]="{'list-group-item' : true}"
              [ngClass]="{ 'nomCommande': width >= 768, 'viewCommande': width < 768 }"
-             style="background-color:{{cr.color}}">
-          <p>{{ cr.numCommande }} </p>
+             style="background-color:{{com.color}}">
+          <button *ngIf="canDelete()" (click)="deleteLine(com)" color="primary" mat-raised-button>
+            <mat-icon>delete</mat-icon>
+          </button>
+          <p>{{ com.num_com }} </p>
         </div>
       </div>
     </div>
+<!--    si ca bug changer la liste cra iciiii -->
     <div *ngFor="let cra of listeCra" class="p-2">
       <div class="d-flex flex-column" class="colonneJour">
-        <div class="p-2" class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate()-2}"
-                                                class="textJour">{{ afficherjour(cra.date.getDay())}}</p>
+        <div class="p-2" class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate() }"
+                                                class="textJour">{{ afficherjour(cra.date.getDay())}} {{cra.date.getDate()}}</p>
         </div>
         <span *ngIf="cra.duree_totale<0.96" class="badge badge-info">Non complet</span>
         <span *ngIf="cra.duree_totale>0.96 && cra.duree_totale<1.04" class="badge badge-success">Complet</span>
@@ -28,7 +32,9 @@
                           [duree]=sp.duree
                           [idCra]="sp.idCra"
                           [index]="i"
-                          [indexWeek]="this.index">
+                          [indexWeek]="this.index"
+                          [nomSp]="sp.numCommande"
+                          [status]="cra.status">
         </app-compte-rendu>
       </div>
     </div>

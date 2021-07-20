@@ -2,6 +2,8 @@
   margin-right: 3%;
   margin-top: 3%;
   margin-bottom: 3%;
+  z-index : 1000;
+
 
 }
 
@@ -135,12 +137,24 @@
 .add-commande {
   display: inline-block;
   padding: 10px;
-  margin: 10px;
+  margin: 0px;
   position: absolute;
   right: 5%;
-  z-index: 100;
 }
-
+.set-status{
+  display: inline-block;
+  padding: 10px;
+  margin: 0px;
+  position: absolute;
+  right: 12%;
+}
+.message-status{
+  display: inline-block;
+  padding: 10px;
+  margin: 0px;
+  position: absolute;
+  right: 12%;
+}
 add-commande-responsive {
 
   padding: 10px;

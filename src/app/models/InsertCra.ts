@@ -1,4 +1,5 @@
 import {CompteRendu} from './CompteRendu';
+import {CompteRenduInsert} from './CompteRenduInsert';
 
 export class InsertCra {
   constructor(
@@ -7,6 +8,6 @@ export class InsertCra {
     public date: string,
     public duree_totale: string,
     public status: string,
-    public listeCr: CompteRendu[]
+    public listeCr: CompteRenduInsert[]
   ) {}
 }
