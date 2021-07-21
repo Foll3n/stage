@@ -7,9 +7,6 @@
     <p class="date-jour-afichage">{{this.getDateToday()}}</p>
     <p class="info-semaine">Semaine du {{this.firstDate}}  au {{this.lastDate}} </p>
 
-
-
-
 <!--    -------------------------------------------------------------------------------------------------- -->
 <!--    ajouter une commande    -->
     <!--    -------------------------------------------------------------------------------------------------- -->
@@ -67,15 +64,10 @@
 <!--      <div class="carousel-item active">-->
 <!--        <img class="d-block w-100" src="..." alt="First slide">-->
 <!--      </div>-->
-              <ng-template ngbSlide >
-                <app-compte-rendu-vue  [index]="0" *ngIf="this.craWeek[0].listeCra.length != 0"></app-compte-rendu-vue>
+              <ng-template ngbSlide *ngFor="let week of this.craWeek; let i = index" >
+                <app-compte-rendu-vue  [index]="i" *ngIf="week.listeCra.length != 0"></app-compte-rendu-vue>
               </ng-template>
-      <ng-template ngbSlide >
-              <app-compte-rendu-vue [index]="1" *ngIf="this.craWeek[1].listeCra.length != 0"></app-compte-rendu-vue>
-      </ng-template>
-      <ng-template ngbSlide >
-              <app-compte-rendu-vue [index]="2" *ngIf="this.craWeek[2].listeCra.length != 0"></app-compte-rendu-vue>
-  </ng-template>
+
 
     </ngb-carousel>
 

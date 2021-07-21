@@ -6,7 +6,7 @@ export class Cra {
     public id_usr: number,
     public date: Date,
     public duree_totale: number,
-    public status: number,
+    public statusConge: number,
     public listeCr: CompteRendu[]
   ) {}
 }

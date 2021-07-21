@@ -7,7 +7,7 @@ export class InsertCra {
     public id_usr: string,
     public date: string,
     public duree_totale: string,
-    public status: string,
+    public statusConge: string,
     public listeCr: CompteRenduInsert[]
   ) {}
 }

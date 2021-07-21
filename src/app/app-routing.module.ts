@@ -8,9 +8,11 @@ import {VisualisationCongesComponent} from './visualisation-conges/visualisation
 import {CongesEnAttenteComponent} from './conges-en-attente/conges-en-attente.component';
 import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.component';
 import {CompteRenduActiviteComponent} from './compte-rendu-activite/compte-rendu-activite.component';
+import {AdministrationCraComponent} from './administration-cra/administration-cra.component';
 
 const routes: Routes = [
   { path: 'compte-rendu-activite', component : CompteRenduActiviteComponent},
+  { path: 'administration-cra', component : AdministrationCraComponent},
   { path: 'connexion', component: ConnexionComponent },
   { path: 'visualisation', component: VisualisationComponent },
   { path: 'ajouter', component: AjouterComponent },

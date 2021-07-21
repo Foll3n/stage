@@ -3,7 +3,9 @@ import { Observable} from 'rxjs';
 import { environment} from '../../environments/environment';
 import { InsertCra} from '../models/InsertCra';
 import {Big} from '../models/Big';
-import {CompteRenduInsert} from '../models/CompteRenduInsert';
+import {BigCraWeek} from '../models/BigCraWeek';
+import {CraWeekInsert} from '../models/craWeekInsert';
+import {BigCraWeekWaiting} from '../models/BigCraWeekWaiting';
 
 export class CraHttpDatabase{
   httpOptions = {
@@ -27,11 +29,29 @@ export class CraHttpDatabase{
     // tslint:disable-next-line:max-line-length
     this._httpClient.post(href, json, this.httpOptions);
   }
-  putCr(listCr: CompteRenduInsert[]){
-    const json =  JSON.stringify(listCr);
-    console.log("je suis ici");
-    const href = environment.urlCr;
+  // tslint:disable-next-line:variable-name
+  getCraWeekStatus(date_start: string, date_end: string, id_usr: string){
+    const href = environment.urlCraWeek;
     // tslint:disable-next-line:max-line-length
-    this._httpClient.put(href, json, this.httpOptions);
+    const requestUrl = href + '/?dateStart=' + date_start + '&dateEnd=' + date_end + '&idUsr=' + id_usr ;// + `${href}/?date_start=${href}&date_end=${date_end}&id_usr=${id_usr}`;
+    return this._httpClient.get<BigCraWeek>(requestUrl, this.httpOptions);
+  }
+  getCraWeekWaiting(statusCra: number){
+    const href = environment.urlCraWeek;
+    // tslint:disable-next-line:max-line-length
+    const requestUrl = href + '/' + statusCra.toString();
+    return this._httpClient.get<BigCraWeekWaiting>(requestUrl, this.httpOptions);
+  }
+  addCraWeek(craWeek: CraWeekInsert){
+    const href = environment.urlCraWeek;
+    // tslint:disable-next-line:max-line-length
+    const json =  JSON.stringify(craWeek);
+    return this._httpClient.post<CraWeekInsert>(href, json, this.httpOptions);
+  }
+  updateStatusCraWeek(craWeek: CraWeekInsert){
+    const href = environment.urlCraWeek;
+    // tslint:disable-next-line:max-line-length
+    const json =  JSON.stringify(craWeek);
+    return this._httpClient.put<CraWeekInsert>(href, json, this.httpOptions);
   }
 }

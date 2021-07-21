@@ -23,7 +23,7 @@
 }
 
 .mat-grid-list > * {
-  flex: 1 1 80px;
+  flex: 1 1 60px;
 }
 
 .jourSemaine {
@@ -36,18 +36,13 @@
   background-color: #5b5c68;
   padding: 10px;
 
+
 }
 
 .d-flex flex-column {
   vertical-align: middle;
 }
 
-
-.case {
-  height: 100px;
-  margin: 10px;
-  border-radius: 10px;
-}
 
 .nomCommande {
   height: 100px;
@@ -66,7 +61,7 @@
 .jourSemaine {
   text-align: center;
   height: 50px;
-  position: relative;
+
 
 
 }
@@ -96,7 +91,6 @@
 
 .nomCommandeResponsive {
   display: inline-block;
-
   padding: 10px;
   margin: 10px;
   border-radius: 20px;
@@ -122,16 +116,6 @@
   margin: 10px;
 }
 
-.info-semaine {
-  font-size: 20px;
-  margin: 10px;
-  display: inline-block;
-
-  padding: 10px;
-  margin: 10px;
-  border-radius: 20px;
-  border: 1px;
-}
 
 .add-commande {
   display: inline-block;

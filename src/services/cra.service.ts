@@ -11,15 +11,13 @@ import {CraWeek} from '../app/models/craWeek';
 import {CompteRenduInsert} from '../app/models/CompteRenduInsert';
 import {CommandeInsert} from '../app/models/CommandeInsert';
 import {BigCommande} from '../app/models/BigCommande';
+import {CraWeekInsert} from '../app/models/craWeekInsert';
 
 @Injectable()
 export class CraService {
   nb = 0;
   constructor(private httpClient: HttpClient) {
     this.dateDay = new Date();
-
-
-
     this.httpOptions.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))
@@ -30,7 +28,6 @@ export class CraService {
     this.listeCraWeek.push(this.craWeek);
     this.listeCraWeek.push(this.craWeekNext);
     this.fillWeeks();
-    console.log("llllll lll lll lll "+ this.listeCraWeek);
 
 
 
@@ -46,8 +43,6 @@ export class CraService {
   craWeekLast: CraWeek = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
   craWeek: CraWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
   craWeekNext: CraWeek = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
-
-
   public listeCommandes: CommandeInsert[] = [];
   craSubject = new Subject<CraWeek[]>();
   private listeCra: Cra[] = [];
@@ -89,7 +84,7 @@ export class CraService {
 
   validUser(index: number): void {
     for (const cra of this.listeCraWeek[index].listeCra) {
-      cra.status = 1;
+      cra.statusConge = 1;
     }
     this.emitCraSubject();
   }
@@ -139,7 +134,7 @@ export class CraService {
       const id = +cra.id_cra;
       const idUsr = +cra.id_usr;
       const duree = +cra.duree_totale;
-      const status = +cra.status;
+      const status = +cra.statusConge;
       const listCr = [];
       if (cra.listeCr != null){
         for (const sp of cra.listeCr){
@@ -158,7 +153,7 @@ export class CraService {
       const id = cra.id_cra.toString();
       const idUsr = cra.id_usr.toString();
       const duree = cra.duree_totale.toString();
-      const status = cra.status.toString();
+      const status = cra.statusConge.toString();
       const listCr = [];
       for (const sp of cra.listeCr){
         listCr.push(new CompteRenduInsert(id, sp.numCommande, duree, sp.color));
@@ -231,7 +226,9 @@ export class CraService {
         //     new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
         // }
         // this.emitCraSubject();
+        this.getCraWeekStatus(index);
       }else{
+            this.addCraWeek(index);
             this.addCraServer(index);
       }
       this.getDistinctCommandsWeek(index);
@@ -273,6 +270,35 @@ export class CraService {
         console.log(error + 'le serveur ne répond pas ');
       }
     );
+  }
+  getCraWeekStatus(index: number): void{
+    const craHttp = new CraHttpDatabase(this.httpClient);
+    const response = craHttp.getCraWeekStatus(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
+
+    response.subscribe(reponse => {
+      console.log(" je récupère le status" + reponse);
+      this.listeCraWeek[index].setStatus(reponse.statusCra);
+      console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" );
+      this.emitCraSubject();
+    });
+  }
+  addCraWeek(index: number){
+    const craHttp = new CraHttpDatabase(this.httpClient);
+    const response = craHttp.addCraWeek(new CraWeekInsert(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '0', '10'));
+    response.subscribe(reponse => {
+      console.log("pppp pppp " + reponse);
+      //this.emitCraSubject();
+    });
+  }
+  updateStatusCraUtilisateur(index: number, status: string){
+    const craHttp = new CraHttpDatabase(this.httpClient);
+    const response = craHttp.updateStatusCraWeek(new CraWeekInsert(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, status, '10'));
+    response.subscribe(reponse => {
+      console.log(reponse);
+      this.listeCraWeek[index].status = status;
+      console.log("liste craweek index "+ this.listeCraWeek[index].status);
+      this.emitCraSubject();
+    });
   }
   addCraServer(index: number): void {
     console.log('je rentre bien ici !! post');
@@ -331,7 +357,7 @@ export class CraService {
       }
     );
   }
-  setStatusUserToServer(index: number){
+  setStatusCongeUserToServer(index: number){
     console.log('je passe bien ici dans l update de status');
     const json =  JSON.stringify(this.transformToInsertCra(this.listeCraWeek[index].listeCra));
     console.log(json);
@@ -345,11 +371,8 @@ export class CraService {
       }
     );
   }
-  setStatusUser(index: number, status: number){
-    for (const cra of this.listeCraWeek[index].listeCra){
-      cra.status = status;
-      console.log("cra : ", cra.status);
-    }
+  setStatusUser(index: number, status: string){
+    this.updateStatusCraUtilisateur(index, status);
   }
   deleteLine(commande: CommandeInsert, index: number){
     for (const cra of this.listeCraWeek[index].listeCra){

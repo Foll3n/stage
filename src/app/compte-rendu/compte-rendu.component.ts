@@ -57,7 +57,7 @@ export class CompteRenduComponent implements OnInit {
   onModifyCase() {
 
     this.craService.editCraDuree(this.idCra, +this.dureeString, this.index, this.indexWeek);
-    this.craService.getCraById(this.idCra, this.indexWeek);
+    // this.craService.getCraById(this.idCra, this.indexWeek);
   }
 
   checkDureeTotale() {

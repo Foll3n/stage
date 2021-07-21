@@ -43,7 +43,8 @@ import {Realisation} from '../models/Realisation';
 })
 export class CompteRenduActiviteComponent implements OnInit {
   public craWeek!: CraWeek[] ;
-  selectedWeek = 1;
+  selectedWeek = 0;
+
   listeCraSubscription!: Subscription;
   listeCrSubscription!: Subscription;
   firstDate = '';
@@ -217,11 +218,11 @@ export class CompteRenduActiviteComponent implements OnInit {
     this.initDates();
     this.initListeCommandes();
     this.getAvailableCommande();
-    // this.craService.emitCraSubject();
+
+    //this.craService.emitCraSubject();
   }
   save(){
-    this.craService.setStatusUser(this.selectedWeek, 1);
-    this.craService.setStatusUserToServer(this.selectedWeek);
+    this.craService.setStatusUser(this.selectedWeek, '1');
   }
   canUpdateStatus(){
     for (const cra of this.craWeek[this.selectedWeek].listeCra){
@@ -232,18 +233,10 @@ export class CompteRenduActiviteComponent implements OnInit {
     return true;
   }
   seeButton(){
-    for (const cra of this.craWeek[this.selectedWeek].listeCra){
-      if (cra.status > 0){
-        return false;
-      }
-    }
-    return true;
+    console.log("jhe suis au bouton "+ this.craWeek[this.selectedWeek].status);
+    return this.craWeek[this.selectedWeek].status === '0';
+
   }
   seeMessage(){
-    let res = 0;
-    for (const cra of this.craWeek[this.selectedWeek].listeCra){
-      return cra.status;
-    }
-    return true;
-  }
-}
+    return +this.craWeek[this.selectedWeek].status;
+}}

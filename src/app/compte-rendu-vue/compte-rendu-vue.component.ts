@@ -25,12 +25,7 @@ export class CompteRenduVueComponent implements OnInit {
         return window.innerWidth;
     }
   canDelete(){
-      for(const cra of this.craService.listeCraWeek[this.index].listeCra){
-        if (cra.status > 0){
-          return false;
-        }
-      }
-      return true;
+     return this.craService.listeCraWeek[this.index].status === '0';
   }
     ngOnInit(){
       console.log("je suis la !!");
@@ -42,7 +37,10 @@ export class CompteRenduVueComponent implements OnInit {
       );
       this.craService.emitCraSubject();
     }
-
+  getStatus(){
+      console.log("status ahahhahahah "+ this.craService.listeCraWeek[this.index].status);
+      return +this.craService.listeCraWeek[this.index].status;
+  }
     getDay(): Date{
         return this.craService.dateDay;
     }
