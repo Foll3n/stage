@@ -1,0 +1,51 @@
+<p>Ajouter une commande a un projet</p>
+
+<div >
+    <div class="inputNomCommande">
+      <input type="text" class="form-control" placeholder="Code commande" [(ngModel)]="commandeToInsert.num_com" >
+    </div>
+    <mat-form-field appearance="fill"  [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
+      <mat-label>Selectionner un projet</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id" (click)="this.commandeToInsert.id_projet = projet.id">
+          {{projet.code_projet}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button class="btn btn-info" (click)="addCommande()"> Ajouter </button>
+  </div>
+
+  <p>Ajouter une commande a un utilisateur</p>
+  <div>
+
+<!--    selection de l'utilisateur-->
+    <mat-form-field appearance="fill"  [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
+      <mat-label>Selectionner un utilisateur</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id" (click)="this.commandeToInsert.id_projet = projet.id">
+          {{projet.code_projet}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+<!--selection du projet-->
+    <mat-form-field appearance="fill"  [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
+      <mat-label>Selectionner un projet</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id" (click)="getCommandeProjet(projet)">
+          {{projet.code_projet}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+<!--selection de la commande-->
+    <mat-form-field appearance="fill"  [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
+      <mat-label>Selectionner une commande</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let commande of this.listeCommandeProjet" [value]="commande.id" (click)="this.realisation.id_com = commande.id">
+          {{commande.num_com}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button class="btn btn-info" (click)="addRealisation()"> Ajouter </button>
+
+  </div>

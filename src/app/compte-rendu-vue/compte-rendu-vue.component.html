@@ -20,7 +20,8 @@
     </div>
 <!--    si ca bug changer la liste cra iciiii -->
     <div *ngFor="let cra of craWeek.listeCra" class="p-2 " [ngClass]="{ 'width': width >= 768}">
-      <div class="d-flex flex-column" class="colonneJour">
+      <div  class="colonneJour">
+<!--        class="d-flex flex-column"-->
         <div class="p-2 " class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate() }"
                                                 class="textJour">{{ afficherjour(cra.date.getDay())}} {{cra.date.getDate()}}</p>
         </div>

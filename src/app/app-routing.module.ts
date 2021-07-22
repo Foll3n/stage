@@ -9,8 +9,10 @@ import {CongesEnAttenteComponent} from './conges-en-attente/conges-en-attente.co
 import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.component';
 import {CompteRenduActiviteComponent} from './compte-rendu-activite/compte-rendu-activite.component';
 import {AdministrationCraComponent} from './administration-cra/administration-cra.component';
+import {AdministrationProjetComponent} from './administration-projet/administration-projet.component';
 
 const routes: Routes = [
+  { path: 'administration-projet', component : AdministrationProjetComponent},
   { path: 'compte-rendu-activite', component : CompteRenduActiviteComponent},
   { path: 'administration-cra', component : AdministrationCraComponent},
   { path: 'connexion', component: ConnexionComponent },

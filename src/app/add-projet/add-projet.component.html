@@ -1,0 +1,9 @@
+<div class="addProjet">
+  <div class="inputNomProjet">
+    <input type="text" class="form-control" placeholder="Code projet" [(ngModel)]="projetAAjouter.code_projet" >
+  </div>
+  <div class="inputNomProjet">
+    <input class="colorPicker" [style.background]="projetAAjouter.color" [(colorPicker)]="projetAAjouter.color"/>
+  </div>
+  <button type="button" (click)="addProjet()" class="btn btn-info">Ajouter</button>
+</div>

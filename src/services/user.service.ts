@@ -33,7 +33,6 @@ export class UserService {
     const commandeHttp = new CommandeHttpDatabase(this.httpClient);
     const response = commandeHttp.getAllCommandsUser(idUsr);
     response.subscribe(reponse => {
-      console.log(">>>>>>>>>>>>>>>>>>>>>  <<<<<<<<<<<<<<0" + reponse.realisations[0].id);
       this.listeRealisations = reponse.realisations;
       this.emitRealisationSubject();
     });

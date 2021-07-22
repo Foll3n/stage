@@ -58,6 +58,12 @@ import { CompteRenduActiviteComponent } from './compte-rendu-activite/compte-ren
 import {UserService} from '../services/user.service';
 import { AdministrationCraComponent } from './administration-cra/administration-cra.component';
 import { AdministrationProjetComponent } from './administration-projet/administration-projet.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {ColorPickerModule} from 'ngx-color-picker';
+import { AddProjetComponent } from './add-projet/add-projet.component';
+import { AddCommandeComponent } from './add-commande/add-commande.component';
+import {ProjetService} from '../services/projet.service';
+import {CommandeService} from '../services/commande.service';
 
 registerLocaleData(localeFr, 'fr');
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
@@ -89,6 +95,8 @@ registerLocaleData(localeFr, 'fr');
     CompteRenduActiviteComponent,
     AdministrationCraComponent,
     AdministrationProjetComponent,
+    AddProjetComponent,
+    AddCommandeComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,10 +125,12 @@ registerLocaleData(localeFr, 'fr');
     MatSelectModule,
     MatRadioModule,
     MatTabsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatExpansionModule,
+    ColorPickerModule
   ],
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
-  providers: [CraService, UserService],
+  providers: [CraService, UserService, ProjetService, CommandeService],
   bootstrap: [AppComponent]
 })
 
