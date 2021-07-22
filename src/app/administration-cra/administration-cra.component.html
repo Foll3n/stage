@@ -1,0 +1,67 @@
+
+<p>Visualisation Comptes rendus</p>
+
+<ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0" >
+  <ngb-panel title="&#9733; Comptes rendus en attente de validation &#9733;" >
+    <ng-template ngbPanelContent  >
+      <table class="table table-striped"  >
+        <thead >
+        <tr >
+          <th scope="col" sortable="dateStart"  >Date de début</th>
+          <th scope="col" sortable="dateEnd" >Date de fin</th>
+          <th scope="col" sortable="nom" >Nom</th>
+          <th scope="col" sortable="nom" >prenom</th>
+          <th scope="col" sortable="nom" ></th>
+<!--          (sort)="onSort($event)"-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let cra of this.listeCraWaiting" >
+<!--          <th scope="row">{{ cra.dateStart }}</th>-->
+          <td >{{ cra.dateStart  }}</td>
+          <td>{{ cra.dateEnd  }}</td>
+          <td>{{ cra.nomUsername  }}</td>
+          <td>{{ cra.prenomUsername  }}</td>
+          <td>
+            <button type="button" (click)="consulter(cra)" class="btn btn-dark">Consulter</button>
+            <button type="button" (click)="validerCra(cra)" class="btn btn-success">Valider</button>
+            <button type="button" (click)="refuserCra(cra)" class="btn btn-danger">Refuser</button>
+
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ngb-panel>
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <span>  Comptes rendus validés </span>
+    </ng-template>
+    <ng-template ngbPanelContent>
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th scope="col" sortable="dateStart" >Date de début</th>
+          <th scope="col" sortable="dateEnd" >Date de fin</th>
+          <th scope="col" sortable="nom" >Nom</th>
+          <th scope="col" sortable="nom" >prenom</th>
+          <th scope="col" sortable="nom" ></th>
+          <!--          (sort)="onSort($event)"-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let cra of this.listeCraValidate">
+          <!--          <th scope="row">{{ cra.dateStart }}</th>-->
+          <td>{{ cra.dateStart  }}</td>
+          <td>{{ cra.dateEnd  }}</td>
+          <td>{{ cra.nomUsername  }}</td>
+          <td>{{ cra.prenomUsername  }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </ngb-panel>
+
+</ngb-accordion>
+
+<app-compte-rendu-vue  [craWeek]="this.actualWeek" *ngIf="this.actualWeek"></app-compte-rendu-vue>

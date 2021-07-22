@@ -26,17 +26,19 @@
   flex: 1 1 60px;
 }
 
-.jourSemaine {
-  text-align: center;
-  height: 50px;
-}
 
 .colonneJour {
   border-radius: 10px;
   background-color: #5b5c68;
   padding: 10px;
+  width: 100%;
 
 
+}
+
+.persoTest {
+  width: 50%;
+  padding-bottom: 1000px;
 }
 
 .d-flex flex-column {
@@ -135,4 +137,8 @@ add-commande-responsive {
 .button-delete{
   border: none;
   background: transparent;
+}
+
+.width{
+  width: 16%;
 }

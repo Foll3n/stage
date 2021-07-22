@@ -12,13 +12,12 @@
 <!--Formulaire permettant de saisir la durée associée au projet -->
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-  <form >
-      <mat-form-field color="warn" > <!-- le vert intérieur !-->
+      <mat-form-field class="w-75" color="warn" > <!-- le vert intérieur !-->
         <mat-label>Duree</mat-label>
         <input [disabled]="this.status > 0" pattern="^d{0,1}$" type="number" min="0" max="1" step="0.1" matInput size="2" maxlength="3" placeholder="0.0" [(ngModel)]="this.dureeString" (ngModelChange)="onModifyCase()">
 
       </mat-form-field>
-    </form>
+
 
 </div>
 

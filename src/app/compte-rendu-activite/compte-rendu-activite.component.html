@@ -1,4 +1,4 @@
-<section class="decalage">
+<section class="decalage pbot ">
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
   <!--div qui afiche le jour actuel la date et le bouton permettant d'ajouter une commande-->
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
@@ -11,7 +11,7 @@
 <!--    ajouter une commande    -->
     <!--    -------------------------------------------------------------------------------------------------- -->
 
-    <mat-form-field appearance="fill"  [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }">
+    <mat-form-field appearance="fill" *ngIf="seeButton()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }">
       <mat-label>Ajouter commande</mat-label>
       <mat-select>
         <mat-option *ngFor="let com of this.listeAddCommande" [value]="com.id" (click)="addSousProjet(com)">
@@ -41,7 +41,7 @@
   <div *ngFor="let com of this.listeCommande" [ngClass]="{ 'viewCommande': width >= 768, 'nomCommandeResponsive': width < 768 }"
        style="background-color: {{com.color}}">
     <p>{{ com.num_com }} </p>
-    sdfsdfsfsdf
+
   </div>
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
   <!--  affiche chaque compte rendu pour chaque cra en passant la main à la vue compte-rendu-->
@@ -56,22 +56,26 @@
 <!--  </a>-->
 
 <!--  </div>-->
-  <div class='col-12'>
-    <ngb-carousel  #selectedWeek activeId="ngb-slide-1" (slide)="onSlide($event)">
-          ---------------- {{selectedWeek}}-----------------
+  <div>
+    <div class='col-12'>
+      <ngb-carousel  #selectedWeek activeId="ngb-slide-1" (slide)="onSlide($event)">
+        ---------------- {{selectedWeek}}-----------------
 
 
-<!--      <div class="carousel-item active">-->
-<!--        <img class="d-block w-100" src="..." alt="First slide">-->
-<!--      </div>-->
-              <ng-template ngbSlide *ngFor="let week of this.craWeek; let i = index" >
-                <app-compte-rendu-vue  [index]="i" *ngIf="week.listeCra.length != 0"></app-compte-rendu-vue>
-              </ng-template>
+        <!--      <div class="carousel-item active">-->
+        <!--        <img class="d-block w-100" src="..." alt="First slide">-->
+        <!--      </div>-->
+
+        <ng-template ngbSlide *ngFor="let week of this.craWeek; let i = index" >
+          <app-compte-rendu-vue [index]="i" [craWeek]="week" *ngIf="week.listeCra.length != 0"></app-compte-rendu-vue>
+        </ng-template>
 
 
-    </ngb-carousel>
+      </ngb-carousel>
 
+    </div>
   </div>
+
 
       <button *ngIf=" seeButton()" (click)="push()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }"
               color="primary" mat-raised-button>Enregistrer

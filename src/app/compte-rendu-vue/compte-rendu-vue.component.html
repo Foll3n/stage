@@ -3,12 +3,12 @@
 
 
 
-  <div [ngClass]="{ 'd-flex flex-row': width >= 768, 'mobile-view': width < 768}">
+  <div [ngClass]="{ 'd-flex flex-row flex-wrap': width >= 768, 'mobile-view': width < 768}">
     <div class="p-2" id="nomSousProjet">
       <div class="d-flex flex-column ">
         <div [ngClass]="{ 'decalageNomProjetHaut': width >= 768, 'viewCommande': width < 768 }" class="p-2">
         </div>
-        <div *ngFor="let com of this.listeCommande" [ngClass]="{'list-group-item' : true}"
+        <div *ngFor="let com of this.craWeek.listeCommandesWeek" [ngClass]="{'list-group-item' : true}"
              [ngClass]="{ 'nomCommande': width >= 768, 'viewCommande': width < 768 }"
              style="background-color:{{com.color}}">
           <button *ngIf="canDelete()" (click)="deleteLine(com)" color="primary" mat-raised-button>
@@ -19,15 +19,16 @@
       </div>
     </div>
 <!--    si ca bug changer la liste cra iciiii -->
-    <div *ngFor="let cra of listeCra" class="p-2">
+    <div *ngFor="let cra of craWeek.listeCra" class="p-2 " [ngClass]="{ 'width': width >= 768}">
       <div class="d-flex flex-column" class="colonneJour">
-        <div class="p-2" class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate() }"
+        <div class="p-2 " class="jourSemaine"><p [ngClass]="{ 'jour-actuel': cra.date.getDate() == getDay().getDate() }"
                                                 class="textJour">{{ afficherjour(cra.date.getDay())}} {{cra.date.getDate()}}</p>
         </div>
         <span *ngIf="cra.duree_totale<0.96" class="badge badge-info">Non complet</span>
         <span *ngIf="cra.duree_totale>0.96 && cra.duree_totale<1.04" class="badge badge-success">Complet</span>
         <span *ngIf="cra.duree_totale>1.04" class="badge badge-danger">Invalide</span>
         <app-compte-rendu *ngFor="let sp of cra.listeCr ; let i = index"
+                          [cra] = cra
                           [color]=sp.color
                           [duree]=sp.duree
                           [idCra]="sp.idCra"

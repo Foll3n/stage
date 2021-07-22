@@ -16,16 +16,12 @@
 }
 
 .mat-grid-list {
-
-  height: 300px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
 }
 
-.mat-grid-list > * {
-  flex: 1 1 80px;
-}
+
 
 .jourSemaine {
   text-align: center;
@@ -42,6 +38,9 @@
   vertical-align: middle;
 }
 
+.pbot {
+  padding-bottom: 200px;
+}
 
 .case {
   height: 100px;

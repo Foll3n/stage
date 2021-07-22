@@ -12,10 +12,11 @@ import {CommandeInsert} from '../models/CommandeInsert';
     styleUrls: ['./compte-rendu-vue.component.scss']
 })
 export class CompteRenduVueComponent implements OnInit {
-  listeCra: Cra[] = [];
   @Input()
   index!: number;
-    listeCr: CompteRendu[] = []; // rajouter la liste des comptes rendus
+  @Input()
+  craWeek!: CraWeek;
+    // listeCr: CompteRendu[] = []; // rajouter la liste des comptes rendus
   listeCraSubscription!: Subscription;
   listeCommande: CommandeInsert[] = [];
     constructor(public craService: CraService) {
@@ -25,24 +26,23 @@ export class CompteRenduVueComponent implements OnInit {
         return window.innerWidth;
     }
   canDelete(){
-     return this.craService.listeCraWeek[this.index].status === '0';
+     return this.craWeek.status === '0';
   }
     ngOnInit(){
-      console.log("je suis la !!");
-
-      this.listeCraSubscription = this.craService.craSubject.subscribe(
-        (craWeek: CraWeek[]) => {this.listeCra = craWeek[this.index].listeCra;
-                                 this.listeCommande = craWeek[this.index].listeCommandesWeek;
-        }
-      );
-      this.craService.emitCraSubject();
+      console.log("je suis la !!" + this.craWeek);
+      //this.craWeek.listeCommandesWeek;
+      // this.listeCraSubscription = this.craService.craSubject.subscribe(
+      //   (craWeek: CraWeek[]) => {this.listeCra = craWeek[this.index].listeCra;
+      //                            this.listeCommande = craWeek[this.index].listeCommandesWeek;
+      //   }
+      // );
+      // this.craService.emitCraSubject();
     }
   getStatus(){
-      console.log("status ahahhahahah "+ this.craService.listeCraWeek[this.index].status);
-      return +this.craService.listeCraWeek[this.index].status;
+      return +this.craWeek.status;
   }
     getDay(): Date{
-        return this.craService.dateDay;
+        return new Date();
     }
     deleteLine(commande: CommandeInsert){
         this.craService.deleteLineToServer(commande, this.index);

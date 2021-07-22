@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CraService} from '../../services/cra.service';
+import {Cra} from '../models/Cra';
 
 @Component({
   selector: 'app-compte-rendu',
@@ -7,6 +8,8 @@ import {CraService} from '../../services/cra.service';
   styleUrls: ['./compte-rendu.component.scss']
 })
 export class CompteRenduComponent implements OnInit {
+  @Input()
+  cra!: Cra;
   @Input()
   duree!: number;
   @Input()
@@ -61,7 +64,7 @@ export class CompteRenduComponent implements OnInit {
   }
 
   checkDureeTotale() {
-    return this.craService.getDureeTotaleCra(this.idCra, this.indexWeek);
+    return this.cra.duree_totale;
   }
 
   getColor() {

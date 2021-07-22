@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Cra} from '../models/Cra';
 import {CompteRendu} from '../models/CompteRendu';
 import {Subscription} from 'rxjs';
@@ -44,6 +44,8 @@ import {Realisation} from '../models/Realisation';
 export class CompteRenduActiviteComponent implements OnInit {
   public craWeek!: CraWeek[] ;
   selectedWeek = 0;
+  @Input()
+  date!: number;
 
   listeCraSubscription!: Subscription;
   listeCrSubscription!: Subscription;
@@ -65,6 +67,7 @@ export class CompteRenduActiviteComponent implements OnInit {
     config.showNavigationArrows = false;
     config.showNavigationIndicators = true;
   }
+
 
   public getCommandeById(num: string): Realisation {
     const commande = this.listeRealisations.find(

@@ -15,41 +15,41 @@ import {CraWeekInsert} from '../app/models/craWeekInsert';
 
 @Injectable()
 export class CraService {
-  nb = 0;
   constructor(private httpClient: HttpClient) {
     this.dateDay = new Date();
     this.httpOptions.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))
     });
-    console.log('first' + this.craWeek.toString());
-    console.log('first' + this.craWeek.toString());
-    this.listeCraWeek.push(this.craWeekLast);
-    this.listeCraWeek.push(this.craWeek);
-    this.listeCraWeek.push(this.craWeekNext);
-    this.fillWeeks();
-
-
-
-
+    this.initialisation(new Date());
   }
+
   httpOptions = {
     headers: new HttpHeaders()
   };
-
-  dateDay = new Date();
-  dateToday = new Date();
-  listeCraWeek: CraWeek[] = [];
-  craWeekLast: CraWeek = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
-  craWeek: CraWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
-  craWeekNext: CraWeek = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
+  dateDay: Date;
+  dateToday!: Date;
+  listeCraWeek!: CraWeek[];
+  craWeekLast!: CraWeek ;
+  craWeek!: CraWeek;
+  craWeekNext!: CraWeek ;
   public listeCommandes: CommandeInsert[] = [];
   craSubject = new Subject<CraWeek[]>();
   private listeCra: Cra[] = [];
 
 
-
-
+  initialisation(date: Date){
+    this.dateDay = new Date(date);
+    this.dateToday = new Date();
+    this.listeCraWeek = [];
+    this.craWeekLast = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
+    this.craWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
+    this.craWeekNext = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
+    this.listeCraWeek.push(this.craWeekLast);
+    this.listeCraWeek.push(this.craWeek);
+    this.listeCraWeek.push(this.craWeekNext);
+    this.fillWeeks();
+  }
   emitCraSubject(): void {
     // tslint:disable-next-line:triple-equals
         this.craSubject.next(this.listeCraWeek.slice());
@@ -305,8 +305,7 @@ export class CraService {
     // tslint:disable-next-line:ban-types
     const listeCraWeek: InsertCra [] = [];
     for (let i = 0; i < 5; i++) {
-      this.nb++;
-      const cra = new InsertCra(this.nb.toString(), '10', this.addJour(this.listeCraWeek[index].firstDateWeek, i), '0', '0', []);
+      const cra = new InsertCra('', '10', this.addJour(this.listeCraWeek[index].firstDateWeek, i), '0', '0', []);
       listeCraWeek.push(cra);
     }
     const json =  JSON.stringify(listeCraWeek);
@@ -335,7 +334,7 @@ export class CraService {
 
   remplirTest(craWeek: CraWeek) {
     for (let i = 0; i < 5; i++) {
-      const cra = new Cra(this.nb, 10, new Date(this.addJour(craWeek.firstDateWeek, i)), 0, 0, []);
+      const cra = new Cra(0, 10, new Date(this.addJour(craWeek.firstDateWeek, i)), 0, 0, []);
       cra.listeCr = [new CompteRendu(cra.id_cra, 'test', 0, '#F5E0E5'),
         new CompteRendu(cra.id_cra, 'test1', 0, '#C4DBFA'),
         new CompteRendu(cra.id_cra, 'test2', 0, '#DDF7DB')];
@@ -380,7 +379,9 @@ export class CraService {
         // tslint:disable-next-line:triple-equals
         if (cr.numCommande == commande.id){
           const ind =  cra.listeCr.indexOf(cr, 0);
+          cra.duree_totale -= cr.duree;
           cra.listeCr.splice(ind, 1);
+
         }
       }
     }

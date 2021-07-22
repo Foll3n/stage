@@ -57,6 +57,7 @@ import localeFr from '@angular/common/locales/fr';
 import { CompteRenduActiviteComponent } from './compte-rendu-activite/compte-rendu-activite.component';
 import {UserService} from '../services/user.service';
 import { AdministrationCraComponent } from './administration-cra/administration-cra.component';
+import { AdministrationProjetComponent } from './administration-projet/administration-projet.component';
 
 registerLocaleData(localeFr, 'fr');
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
@@ -87,6 +88,7 @@ registerLocaleData(localeFr, 'fr');
     CompteRenduComponent,
     CompteRenduActiviteComponent,
     AdministrationCraComponent,
+    AdministrationProjetComponent,
   ],
   imports: [
     BrowserModule,
