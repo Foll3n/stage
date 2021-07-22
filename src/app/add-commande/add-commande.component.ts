@@ -30,7 +30,7 @@ export class AddCommandeComponent implements OnInit {
   constructor(private projetService: ProjetService, private commandeService: CommandeService) {
     this.commandeProjet = new FormGroup({
       codeCommande: new FormControl(),
-      projet: new FormControl()
+      projet: new FormControl(),
     });
   }
 
@@ -49,9 +49,16 @@ export class AddCommandeComponent implements OnInit {
     return window.innerWidth;
   }
 
+  // addCommande(){
+  //     this.commandeService.addCommande(this.commandeToInsert);
+  //     this.listeCommande = [];
+  // }
   addCommande(){
-      this.commandeService.addCommande(this.commandeToInsert);
-      this.listeCommande = [];
+      if(this.commandeProjet){
+        let commande = new CommandeInsert(this.commandeProjet.get('codeCommande')?.value, this.commandeProjet.get('projet')?.value , '' , '');
+        this.commandeService.addCommande(commande);
+        this.commandeProjet.reset();
+      }
   }
   addRealisation(){
     this.commandeService.addCommandeUser(this.realisation);
