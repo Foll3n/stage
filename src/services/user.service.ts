@@ -33,8 +33,14 @@ export class UserService {
     const commandeHttp = new CommandeHttpDatabase(this.httpClient);
     const response = commandeHttp.getAllCommandsUser(idUsr);
     response.subscribe(reponse => {
-      this.listeRealisations = reponse.realisations;
-      this.emitRealisationSubject();
+      if(reponse.status == 'OK'){
+        this.listeRealisations = reponse.realisations;
+        this.emitRealisationSubject();
+      }
+      else{
+        console.log("Erreur : getAllCommandsUser");
+      }
+
     });
   }
 

@@ -9,7 +9,12 @@ import {CompteRendu} from '../models/CompteRendu';
 import {CompteRenduInsert} from '../models/CompteRenduInsert';
 import {BigProjet} from '../models/BigProjet';
 import {Projet} from '../models/Projet';
+import {ProjetAdd} from '../models/ProjetAdd';
 
+
+/**
+ * Class qui regroupe l'ensemble des appels API de l'api Projet
+ */
 export class ProjetHttpDatabase{
   httpOptions = {
     headers: new HttpHeaders()
@@ -29,7 +34,7 @@ export class ProjetHttpDatabase{
     const json =  JSON.stringify(projet);
     const href = environment.urlProjet;
     // tslint:disable-next-line:max-line-length
-    return this._httpClient.post<Projet>(href, json, this.httpOptions);
+    return this._httpClient.post<ProjetAdd>(href, json, this.httpOptions);
   }
 
   deleteProjet(projet: Projet){

@@ -36,9 +36,15 @@ export class ProjetService {
     const projetHttp = new ProjetHttpDatabase(this.httpClient);
     const response = projetHttp.addProjet(projet);
     response.subscribe(reponse => {
-      console.log(reponse);
-      this.listeProjet.push(projet);
-      this.emitProjetSubject();
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        projet.id = reponse.idProjet;
+        this.listeProjet.push(projet);
+        this.emitProjetSubject();
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
 
     });
   }
@@ -46,8 +52,15 @@ export class ProjetService {
     const projetHttp = new ProjetHttpDatabase(this.httpClient);
     const response = projetHttp.getAllProjects();
     response.subscribe(reponse => {
-      this.listeProjet = reponse.liste_projet;
-      this.emitProjetSubject();
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        this.listeProjet = reponse.liste_projet;
+        this.emitProjetSubject();
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
+
     });
   }
 }

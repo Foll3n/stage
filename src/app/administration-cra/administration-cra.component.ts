@@ -27,6 +27,11 @@ export class AdministrationCraComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  /**
+   * récupère un cra précis dans un CRA à la semaine
+   * @param cra
+   */
   public getCraWeek(cra: CraWeekInsert): CraWeekInsert | null {
     if (cra.idCra){
       const res = this.listeCraWaiting.find(
@@ -35,28 +40,47 @@ export class AdministrationCraComponent implements OnInit {
     }
     return null;
   }
-  notDisplay(){
-    this.display=false;
-  }
+
+  /**
+   * Appel à l'api pour récupérer la liste des cra en attente de validation
+   */
   fillListeCraWaiting(){
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCraWeekWaiting(1);
     response.subscribe(reponse => {
-      this.listeCraWaiting = this.sortList(reponse.listeCraWeek);
-      console.log(this.listeCraWaiting);
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        this.listeCraWaiting = this.sortList(reponse.listeCraWeek);
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
     });
   }
 
 
-
+  /**
+   * Appel API afin de récupérer la liste des CRA validés
+   */
   fillListeCraValidate(){
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCraWeekWaiting(2);
 
     response.subscribe(reponse => {
-      this.listeCraValidate = this.sortList(reponse.listeCraWeek);
+      if(reponse.status == 'OK'){
+        console.log("add commande user");
+        this.listeCraValidate = this.sortList(reponse.listeCraWeek);
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
     });
   }
+
+  /**
+   * supprime un cra de la liste des cras en attente
+    * @param cra
+   */
   deleteCraWait(cra: CraWeekInsert){
     const c = this.getCraWeek(cra);
     if (c){
@@ -64,6 +88,11 @@ export class AdministrationCraComponent implements OnInit {
       this.listeCraWaiting.splice(index, 1);
     }
   }
+
+  /**
+   * Appel API pour afficher le compte rendu à la semaine pour un cra particulier
+    * @param cra
+   */
   consulter(cra: CraWeekInsert){
     //this.craService.initialisation(new Date(cra.dateStart), true);
     this.actualWeek = new CraWeek(0, new Date(cra.dateStart));
@@ -72,11 +101,21 @@ export class AdministrationCraComponent implements OnInit {
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCra(cra.dateStart, cra.dateEnd, '10');
     response.subscribe(reponse => {
-      this.transform(reponse.liste_cra);
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        this.transform(reponse.liste_cra);
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
 
     });
   }
 
+  /**
+   * Permet de remplir la semaine actuelle à partir d'une liste de cra avec uniquement des strings
+    * @param liste_cra
+   */
   public transform(liste_cra: InsertCra[]): void {
     console.log("je suis ici ahahhahahhahahaha");
     // tslint:disable-next-line:no-non-null-assertion
@@ -96,17 +135,33 @@ export class AdministrationCraComponent implements OnInit {
       this.actualWeek!.listeCra.push(new Cra(id, idUsr, new Date(cra.date), duree, status, listCr));
     }
   }
+
+  /**
+   * Valider un cra en attente
+   * @param cra
+   */
   validerCra(cra: CraWeekInsert){
     this.actualWeek = undefined;
     cra.status = '2';
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.updateStatusCraWeek(cra);
     response.subscribe(reponse => {
-      this.deleteCraWait(cra);
-      this.listeCraValidate.push(cra);
-      this.listeCraValidate = this.sortList(this.listeCraValidate);
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        this.deleteCraWait(cra);
+        this.listeCraValidate.push(cra);
+        this.listeCraValidate = this.sortList(this.listeCraValidate);
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
     });
     }
+
+  /**
+   * Refuser cra en attente
+    * @param cra
+   */
   refuserCra(cra: CraWeekInsert){
     this.actualWeek = undefined;
     cra.status = '0';
@@ -116,6 +171,11 @@ export class AdministrationCraComponent implements OnInit {
       this.deleteCraWait(cra);
     });
   }
+
+  /**
+   * Fonction qui a vocation d'être supprimé qui permet de trier les cra par date du plus récent au plus ancien
+    * @param liste
+   */
   sortList(liste: CraWeekInsert[]){
     const sortedArray: CraWeekInsert[] = liste.sort((obj1, obj2) => {
       if (obj1.dateStart < obj2.dateStart) {

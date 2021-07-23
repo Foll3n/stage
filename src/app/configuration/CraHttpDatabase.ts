@@ -6,7 +6,9 @@ import {Big} from '../models/Big';
 import {BigCraWeek} from '../models/BigCraWeek';
 import {CraWeekInsert} from '../models/craWeekInsert';
 import {BigCraWeekWaiting} from '../models/BigCraWeekWaiting';
-
+/**
+ * Class qui regroupe l'ensemble des appels API de l'api Cra
+ */
 export class CraHttpDatabase{
   httpOptions = {
     headers: new HttpHeaders()

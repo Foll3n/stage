@@ -1,17 +1,24 @@
 
-<p>Visualisation Comptes rendus</p>
+<p id="titre-visualisation-cr">Visualisation Comptes rendus</p>
+<!------------------------------------------------------------------------------------------>
+<!-------------------Accordéon--------------------->
+<!------------------------------------------------------------------------------------------>
 
 <mat-accordion>
+  <!------------------------------------------------------------------------------------------>
+  <!---------Comptes rendus en cours de validation ----------------------->
+  <!------------------------------------------------------------------------------------------>
+
   <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
         Comptes rendus en cours de validation
       </mat-panel-title>
       <mat-panel-description>
-        This is a summary of the content
+        {{this.listeCraWaiting.length}} Comptes rendus en attente
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <table class="table table-striped"  >
+    <table class="table table-striped" *ngIf="this.listeCraWaiting.length > 0">
       <thead >
       <tr >
         <th scope="col" sortable="dateStart"  >Date de début</th>
@@ -39,14 +46,16 @@
       </tbody>
     </table>
   </mat-expansion-panel>
-
+  <!------------------------------------------------------------------------------------------>
+  <!---------Comptes rendus validés---------------------->
+  <!------------------------------------------------------------------------------------------>
   <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
         Comptes rendus validés
       </mat-panel-title>
       <mat-panel-description>
-        This is a summary of the content
+        {{this.listeCraValidate.length}} comptes rendus validés
       </mat-panel-description>
     </mat-expansion-panel-header>
     <table class="table table-striped">
@@ -74,5 +83,8 @@
 
 </mat-accordion>
 
+<!------------------------------------------------------------------------------------------>
+<!---------Permet d'afficher le CRA à la semaine sans le nom de projet à coté pour le moment ----------------------->
+<!------------------------------------------------------------------------------------------>
 
 <app-compte-rendu-vue  [craWeek]="this.actualWeek" *ngIf="this.actualWeek"></app-compte-rendu-vue>

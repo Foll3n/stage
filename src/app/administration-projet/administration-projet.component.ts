@@ -14,7 +14,6 @@ import {Subscription} from 'rxjs';
 })
 export class AdministrationProjetComponent implements OnInit {
 
-  projetAAjouter: Projet = new Projet('', '', '');
   listeProjets!: Projet[];
   listeProjetSubscription!: Subscription;
   color = '';
@@ -25,6 +24,10 @@ export class AdministrationProjetComponent implements OnInit {
       (projets: Projet[]) => {this.listeProjets = projets;
       });
   }
+
+  /**
+   * Retourne la taille de la fenêtre actuelle
+   */
   public get width() {
     return window.innerWidth;
   }

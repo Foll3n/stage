@@ -22,9 +22,16 @@ export class CompteRenduVueComponent implements OnInit {
     constructor(public craService: CraService) {
     }
 
+  /**
+   * récupère la taille de la fenetre
+   */
     public get width() {
         return window.innerWidth;
     }
+
+  /**
+   * Renvoie true si on peut supprimer la ligne
+    */
   canDelete(){
      return this.craWeek.status === '0';
   }
@@ -38,16 +45,34 @@ export class CompteRenduVueComponent implements OnInit {
       // );
       // this.craService.emitCraSubject();
     }
+
+  /**
+   * renvoie le status d'une semaine de cra
+    */
   getStatus(){
       return +this.craWeek.status;
   }
+
+  /**
+   * renvoie la date du jour actuel
+   */
     getDay(): Date{
         return new Date();
     }
-    deleteLine(commande: CommandeInsert){
+
+  /**
+   * Appel API plus au service pour supprimer une ligne dans notre cra à la semaine (c'est à dire supprimer une commande)
+   * * @param commande
+   */
+  deleteLine(commande: CommandeInsert){
         this.craService.deleteLineToServer(commande, this.index);
     }
-    afficherjour(day: number): string {
+
+  /**
+   * Afficher le jour en francais
+   * @param day
+   */
+  afficherjour(day: number): string {
         return ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'][day];
     }
 }

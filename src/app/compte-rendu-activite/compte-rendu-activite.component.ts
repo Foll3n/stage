@@ -43,9 +43,9 @@ import {Realisation} from '../models/Realisation';
 })
 export class CompteRenduActiviteComponent implements OnInit {
   public craWeek!: CraWeek[] ;
-  selectedWeek = 0;
-  @Input()
-  date!: number;
+  selectedWeek = 1;
+  // @Input()
+  // date!: number;
 
   listeCraSubscription!: Subscription;
   listeCrSubscription!: Subscription;
@@ -68,12 +68,20 @@ export class CompteRenduActiviteComponent implements OnInit {
     config.showNavigationIndicators = true;
   }
 
-
+  /**
+   * Récupère une commande précise réalisée par un utilisateur
+   * @param num
+   */
   public getCommandeById(num: string): Realisation {
     const commande = this.listeRealisations.find(
       (real) => real.num_commande === num);
     return commande as Realisation;
   }
+
+  /**
+   * Fonction permettant de vérifier si la réalisation d'un utilisateur est dans la liste des commandes
+   * @param num_com
+   */
   checkRelInListeCommande(num_com: string): boolean{
     if (this.listeCommande){
       console.log('coucou' + this.listeCommande);
@@ -87,8 +95,10 @@ export class CompteRenduActiviteComponent implements OnInit {
     return false;
   }
 
+  /**
+   * Permet de renvoyer la liste des commandes possible à ajouter pour un utilisateur dans sa semaine
+   */
   getAvailableCommande(){
-    console.log('iiiiiiiiiiiiiiiiiii' + this.listeRealisations);
     this.listeAddCommande = [];
     for (const real of this.listeRealisations ){
       console.log(real.id + 'jjjjjjjjjjjj');
@@ -102,11 +112,17 @@ export class CompteRenduActiviteComponent implements OnInit {
     }
   }
 
+  /**
+   * renvoie la liste des commandes d'une semaine de cra
+    */
   initListeCommandes(){
 
     this.listeCommande = this.craWeek[this.selectedWeek].listeCommandesWeek;
 
   }
+  /**
+  Met à jour la date de début de semaine et de fin de semaine afin de les afficher au dessus de mon calendrier
+   */
   initDates(){
     this.firstDate = this.craWeek[this.selectedWeek].firstDate;
     this.lastDate = this.craWeek[this.selectedWeek].lastDate;
@@ -124,109 +140,112 @@ export class CompteRenduActiviteComponent implements OnInit {
     console.log('test');
     this.craService.emitCraSubject();
   }
+
+  /**
+   * Ajoute un compte rendu (appel API) -> ajoute une ligne dans mon emploi du temps à la semaine d'une commande précise
+    * @param com
+   */
   addSousProjet(com: CommandeInsert): void { ///////////////////////////////////////////////
     // @ts-ignore
     // this.craService.getCraToServer();
     // this.craService.addCraServer();
-    console.log(com.color + ' pppppppppppppppppp ');
     if (!com.color){
       com.color = '';
     }
-    console.log('je veux savoit le numero ' + this.selectedWeek + '    ' + com.id);
     const commande = new CommandeInsert(com.num_com, com.id_projet, com.id, com.color);    // id -> 1 ou id 2 pour le projet pour le moment et 2/5 pour id commande
     this.craService.addCr(new CompteRendu(0, com.id, 0.0, com.color), this.selectedWeek, commande);
 
   }
 
+  /**
+   * Renvoie la date du jour actuel
+   */
   getDay(): Date{
-    return this.craService.dateDay;
-  }
-  getListeCra(){
-    return this.craWeek;
+    return new Date();
   }
 
+  /**
+   * Renvoie la date du jour sous forme de string que l'on utilise tout en haut de la page pour afficher la date du jour actuel
+    */
   getDateToday(): string{
     return this.afficherjour(this.getDay().getDay()) + ' ' + this.craService.getDateToday();
   }
 
-  getFirstDayWeek() {
-    return this.craWeek[this.selectedWeek].firstDate;
-  }
 
-  getLastDayWeek() {
-    return this.craWeek[this.selectedWeek].lastDate;
-  }
   // select(slideId: string, source: NgbSlideEventSource){
   //   console.log("testttt"+slideId);
   // }
+  /**
+   * Appuie sur le bouton enregistrer de notre IHM
+   */
   push() {
     // this.craService.addCraServer(2);
     this.craService.saveCra(this.selectedWeek);
   }
 
 
-
+  /**
+   * Permet de supprimer tous les cras d'une semaine mais ne s'utilisera jamais
+    */
   delete() {
     this.craService.supprimer(this.selectedWeek);
   }
 
-  findIndexToUpdate(cra: Cra) {
-    // @ts-ignore
-    return cra.id_cra === this;
-  }
-
-  // onFetch() {
-  //  this.craService.getCraFromServer();
-
-
-
-  // }
+  /**
+   * Permet d'éditer un cran précis mais jamais utilisé car ce n'est pas le cra en lui meme que nous éditons
+   * @param cra
+   */
   onEdit(cra: Cra) {
     this.craService.editCra(cra, this.selectedWeek);
   }
 
+  /**
+   * Permet d'afficher le jour en français plutôt que sous forme de numéro
+    * @param day
+   */
   afficherjour(day: number): string {
-    return ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'][day];
+    return ['Dimanche','Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'][day];
   }
 
   test1(){
     console.log('pppppppppppppppppppp');
   }
 
+  /**
+   * Fonction appelée lors du slide du caroussel qui permet de sélectionner le cra de la semaine dans la liste
+   * @param $event
+   */
   onSlide($event: NgbSlideEvent) {
 
-    console.log($event.current + ' 000000000');
-    switch ($event.current){
-      case 'ngb-slide-0': {
-        this.selectedWeek = 0;
-        break;
-      }
-      case 'ngb-slide-1': {
-        this.selectedWeek = 1;
-        break;
-      }
-      case 'ngb-slide-2': {
-        this.selectedWeek = 2;
-        break;
-      }
-      default: {
-        this.selectedWeek = 1;
-      }
-    }
-
+    let res = ($event.current.split("-").pop());
+    if (res)
+    this.selectedWeek = +res;
+    console.log("res :" + res);
     this.update();
-    console.log('tttttttttttttttttttttttttttt' + $event.direction + 'tttttttttttttttttttttttttttttt' + this.selectedWeek);
   }
+
+  /**
+   * Fonction permettant d'initialiser les commandes Disponibles dans la semaine ainsi que d'initialiser les dates de la semaine
+   */
   update(){
+    console.log("je passe bien dans le update");
     this.initDates();
     this.initListeCommandes();
     this.getAvailableCommande();
 
     //this.craService.emitCraSubject();
   }
+
+  /**
+   * permet à l'utilisateur de valider sa semaine elle sera donc envoyé aux administrateurs afin qu'ils la valident définitivement
+    */
   save(){
     this.craService.setStatusUser(this.selectedWeek, '1');
   }
+
+  /**
+   * Est ce que la semaine est correctement remplie ? c'est à dire que chaque jour à une durée totale à 1
+    */
   canUpdateStatus(){
     for (const cra of this.craWeek[this.selectedWeek].listeCra){
       if (cra.duree_totale < 1 ){
@@ -235,11 +254,19 @@ export class CompteRenduActiviteComponent implements OnInit {
     }
     return true;
   }
+
+  /**
+   * Permet de ne pas afficher le bouton si le status est validé
+   */
   seeButton(){
     console.log("jhe suis au bouton "+ this.craWeek[this.selectedWeek].status);
     return this.craWeek[this.selectedWeek].status === '0';
 
   }
+
+  /**
+   * permet de renvoyer le status du cra à la semaine afin de gérer l'affichage en fonction de son status
+   */
   seeMessage(){
     return +this.craWeek[this.selectedWeek].status;
 }}

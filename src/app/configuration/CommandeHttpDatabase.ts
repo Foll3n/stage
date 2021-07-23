@@ -11,7 +11,11 @@ import {BigProjet} from '../models/BigProjet';
 import {Projet} from '../models/Projet';
 import {CommandeInsert} from '../models/CommandeInsert';
 import {RealisationPost} from '../models/RealisationPost';
+import {Result} from '../models/Result';
 
+/**
+ * Class qui regroupe l'ensemble des appels API de l'api Commande
+ */
 export class CommandeHttpDatabase{
   httpOptions = {
     headers: new HttpHeaders()
@@ -39,13 +43,13 @@ export class CommandeHttpDatabase{
     const json =  JSON.stringify(commande);
     const href = environment.urlCommande;
     // tslint:disable-next-line:max-line-length
-    return this._httpClient.post(href, json, this.httpOptions);
+    return this._httpClient.post<Result>(href, json, this.httpOptions);
   }
 
   addCommandeUser(realisation: RealisationPost){
     const href = environment.urlRealisation;
     const json =  JSON.stringify(realisation);
-    return this._httpClient.post(href, json, this.httpOptions);
+    return this._httpClient.post<Result>(href, json, this.httpOptions);
   }
   deleteCommandeUser(realisation: RealisationPost){
     const href = environment.urlRealisation;

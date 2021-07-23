@@ -1,6 +1,8 @@
 <p>Ajouter une commande a un projet</p>
 
-
+<!----------------------------------------------------------------------------------------------------------------->
+<!------------------------- AJOUTER UNE COMMANDE A UN PROJET------------------------------->
+<!----------------------------------------------------------------------------------------------------------------->
 
 <form class="form-group" [formGroup]="commandeProjet" (submit)="addCommande()">
   <div class="inputNomCommande">
@@ -16,40 +18,49 @@
   </mat-form-field>
   <input *ngIf="this.commandeProjet.valid" type="submit" value="Ajouter" class="btn btn-info" >
 </form>
-
+<!----------------------------------------------------------------------------------------------------------------->
+<!------------------------- AJOUTER UNE COMMANDE A UN UTILISATEUR------------------------------>
+<!----------------------------------------------------------------------------------------------------------------->
 <p>Ajouter une commande a un utilisateur</p>
-<div>
 
-  <!--    selection de l'utilisateur-->
+
+<form class="form-group" [formGroup]="commandeUtilisateur" (submit)="addRealisation()">
+
+  <!----------------------------------------------------------------------------------------------------------------->
+  <!------------------------- SELECTION DU L'UTILISATEUR------------------------------->
+  <!----------------------------------------------------------------------------------------------------------------->
   <mat-form-field appearance="fill" [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
     <mat-label>Selectionner un utilisateur</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id"
-                  (click)="this.commandeToInsert.id_projet = projet.id">
+    <mat-select formControlName="utilisateur" required>
+      <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id">
         {{projet.code_projet}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <!--selection du projet-->
+  <!----------------------------------------------------------------------------------------------------------------->
+  <!------------------------- SELECTION DU PROJET------------------------------->
+  <!----------------------------------------------------------------------------------------------------------------->
   <mat-form-field appearance="fill" [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
     <mat-label>Selectionner un projet</mat-label>
-    <mat-select>
+    <mat-select formControlName="projet" required>
       <mat-option *ngFor="let projet of this.listeProjets" [value]="projet.id" (click)="getCommandeProjet(projet)">
         {{projet.code_projet}}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <!--selection de la commande-->
+  <!----------------------------------------------------------------------------------------------------------------->
+  <!------------------------- SELECTION DE LA COMMANDE------------------------------->
+  <!----------------------------------------------------------------------------------------------------------------->
   <mat-form-field appearance="fill" [ngClass]="{ 'add-projet': width >= 768, 'add-projet-responsive': width < 768 }">
     <mat-label>Selectionner une commande</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let commande of this.listeCommandeProjet" [value]="commande.id"
-                  (click)="this.realisation.id_com = commande.id">
+    <mat-select formControlName="commande" required>
+      <mat-option *ngFor="let commande of this.listeCommandeProjet" [value]="commande.id">
         {{commande.num_com}}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button class="btn btn-info" (click)="addRealisation()"> Ajouter</button>
+  <input *ngIf="this.commandeUtilisateur.valid" type="submit" value="Ajouter" class="btn btn-info" >
 
-</div>
+
+</form>

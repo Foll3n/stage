@@ -11,6 +11,9 @@ import {RealisationPost} from '../app/models/RealisationPost';
 
 
 @Injectable()
+/**
+ * Class non utilisée pour le moment
+ */
 export class CommandeService {
   userId = '10';
   listeCommandes: CommandeInsert[] = [];
@@ -59,9 +62,15 @@ export class CommandeService {
     const commandeHttp = new CommandeHttpDatabase(this.httpClient);
     const response = commandeHttp.getAllCommandsProjet(projet.id);
     response.subscribe(reponse => {
-      console.log(reponse);
-      this.listeCommandesProjet = reponse.listeCommande;
-      this.emitCommandeProjetSubject();
+      if (reponse.status == 'OK'){
+
+        console.log(reponse);
+        this.listeCommandesProjet = reponse.listeCommande;
+        this.emitCommandeProjetSubject();
+      }
+      else{
+        console.log("Erreur: getAllCommandsProjet");
+      }
     });
   }
 }

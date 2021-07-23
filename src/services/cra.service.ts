@@ -12,8 +12,12 @@ import {CompteRenduInsert} from '../app/models/CompteRenduInsert';
 import {CommandeInsert} from '../app/models/CommandeInsert';
 import {BigCommande} from '../app/models/BigCommande';
 import {CraWeekInsert} from '../app/models/craWeekInsert';
+import {Result} from '../app/models/Result';
 
 @Injectable()
+/**
+ * Service uniquement utilisable dans la vue du compte rendu à la semaine0
+ */
 export class CraService {
   constructor(private httpClient: HttpClient) {
     this.dateDay = new Date();
@@ -37,7 +41,10 @@ export class CraService {
   craSubject = new Subject<CraWeek[]>();
   private listeCra: Cra[] = [];
 
-
+  /**
+   * Initialise notre service du cra à la semaine en lui passant une date
+   * @param date
+   */
   initialisation(date: Date){
     this.dateDay = new Date(date);
     this.dateToday = new Date();
@@ -50,14 +57,27 @@ export class CraService {
     this.listeCraWeek.push(this.craWeekNext);
     this.fillWeeks();
   }
+  /**
+   * permet d'envoyer à touts les composants abonées la liste de cra Semaine
+   */
   emitCraSubject(): void {
     // tslint:disable-next-line:triple-equals
         this.craSubject.next(this.listeCraWeek.slice());
   }
 
+  /**
+   * Renvoie la date du jour en français dans un format particulier pour le titre
+   */
   getDateToday(){
     return formatDate(this.dateToday, 'dd MMMM yyyy', 'fr');
   }
+
+  /**
+   * Ajoute une ligne correspondant à une commande précise dans la semaine actuelle
+   * @param cr
+   * @param index
+   * @param commande
+   */
   addCr(cr: CompteRendu, index: number, commande: CommandeInsert): void {
     const listeCr = [];
     for (const cra of this.listeCraWeek[index].listeCra) {
@@ -71,48 +91,87 @@ export class CraService {
 
   }
 
+  /**
+   * Ajoute un cra à la liste des cras de la semaine
+   * @param cra
+   * @param index
+   */
   addCra(cra: Cra, index: number): void {
     this.listeCraWeek[index].listeCra.push(cra);
     this.emitCraSubject();
   }
 
+  /**
+   * récupère un cra précis dans la liste des semaines de cra
+   * @param id
+   * @param index
+   */
   public getCraById(id: number, index: number): Cra {
     const cra = this.listeCraWeek[index].listeCra.find(
       (craObject) => craObject.id_cra === id);
     return cra as Cra;
   }
 
-  validUser(index: number): void {
+  /**
+   * Fonction inutile qui permet de mettre le status du congé à 1
+   * @param index
+   */
+  validConge(index: number): void {
     for (const cra of this.listeCraWeek[index].listeCra) {
       cra.statusConge = 1;
     }
     this.emitCraSubject();
   }
 
+  /**
+   * renvoie la durée totale d'un cra particulier dans la liste des cra d'une semaine précise (number)
+   * @param idCra
+   * @param index
+   */
   getDureeTotaleCra(idCra: number, index: number): number {
     return this.getCraById(idCra, index).duree_totale;
   }
 
+  /**
+   * Afficher un cra
+    * @param index
+   */
   affichercra(index: number): void {
     console.log(this.listeCraWeek[index].listeCra);
   }
 
+  /**
+   * fonction permettant de définir comment on compare deux cras
+   * @param cra
+   */
   findIndexToUpdate(cra: Cra): void {
     // @ts-ignore
     return cra.id_cra === this;
   }
 
+  /**
+   * Met à jour un cra précis donné en paramètre (jamais utilisé)
+    * @param cra
+   * @param index
+   */
   editCra(cra: Cra, index: number): void {
     const updateItem = this.listeCraWeek[index].listeCra.find(this.findIndexToUpdate, cra.id_cra);
     let ind = 0;
     if (updateItem instanceof Cra) {
       ind = this.listeCraWeek[index].listeCra.indexOf(updateItem);
+      this.listeCraWeek[index].listeCra[ind] = cra;
+      this.emitCraSubject();
     }
-    this.listeCraWeek[index].listeCra[ind] = cra;
-    this.emitCraSubject();
 
   }
 
+  /**
+   * Permet de mettre à jour la durée d'un compte rendu passé en paramètre
+   * @param idCra
+   * @param duree
+   * @param indexCr
+   * @param indexCraWeek
+   */
   editCraDuree(idCra: number, duree: number, indexCr: number, indexCraWeek: number): void {
     const updateItem = this.listeCraWeek[indexCraWeek].listeCra.find(x => x.id_cra === idCra);
     // @ts-ignore
@@ -126,7 +185,12 @@ export class CraService {
 
   }
 
-  // tslint:disable-next-line:variable-name
+  /**
+   * Transforme une liste d'objets de type InsertCra en liste de Cra que l'on set directement à notre listeCraWeek
+    * @param liste_cra
+   * @param index
+   */
+// tslint:disable-next-line:variable-name
   public transform(liste_cra: InsertCra[], index: number): void {
     this.listeCraWeek[index].listeCra = [];
     for (const cra of liste_cra) {
@@ -145,7 +209,9 @@ export class CraService {
     }
 
   }
-
+  /**
+   * Fonction qui prend un tableau de cra en paramètre et renvoie un tableau d'insertCra
+   */
   // tslint:disable-next-line:variable-name
   public transformToInsertCra(liste_cra: Cra[]): InsertCra[] {
     const res = [];
@@ -169,10 +235,20 @@ export class CraService {
   //     case 2 : {this.listeCraWeek[ind] = this.craWeekNext; break; }
   //   }
   // }
+  /**
+   * Appel API pour supprimer un cra à la semaine mais jamais utilisé
+    * @param index
+   */
   supprimer(index: number): void {
     const json = JSON.stringify(this.transformToInsertCra(this.listeCraWeek[index].listeCra));
-    this.httpClient.delete(environment.urlCra, this.httpOptions).subscribe(
+    this.httpClient.delete<Result>(environment.urlCra, this.httpOptions).subscribe(
       response => {
+        if(response.status == 'OK'){
+          console.log(response);
+        }
+        else{
+          console.log("Erreur de requete de base de données");
+        }
         console.log('suppression -> ' + response);
       },
       error => {
@@ -181,6 +257,12 @@ export class CraService {
     );
   }
 
+  /**
+   * Appel API pour ajouter une ligne (une commande) à notre Cra de semaine
+   * @param index
+   * @param listeCompteRendu
+   * @param commande
+   */
   addCraLine(index: number, listeCompteRendu: CompteRendu[], commande: CommandeInsert){
     console.log('Ajout d une ligne dans le serveur');
     // tslint:disable-next-line:ban-types
@@ -191,17 +273,24 @@ export class CraService {
     }
     const json =  JSON.stringify(listeCompte);
     console.log(json);
-    this.httpClient.post(environment.urlCr, json, this.httpOptions).subscribe(
+    this.httpClient.post<Result>(environment.urlCr, json, this.httpOptions).subscribe(
       response => {
-        console.log(response);
-       // this.getDistinctCommandsWeek(index);
-        if (this.listeCraWeek[index].listeCommandesWeek){
-          this.listeCraWeek[index].addCom(commande); ///////////////////////////////////////////////////////////////////////////////
+        if(response.status == 'OK'){
+          console.log(response);
+          // this.getDistinctCommandsWeek(index);
+          if (this.listeCraWeek[index].listeCommandesWeek){
+            this.listeCraWeek[index].addCom(commande); ///////////////////////////////////////////////////////////////////////////////
+          }
+          else{
+            this.listeCraWeek[index].setListeCom([commande]);
+          }
+          this.emitCraSubject();
         }
         else{
-          this.listeCraWeek[index].setListeCom([commande]);
+          console.log("Erreur de requete de base de données");
         }
-        this.emitCraSubject();
+        console.log(response);
+
       },
       error => {
         console.log(error + 'le serveur ne répond pas ');
@@ -209,31 +298,36 @@ export class CraService {
     );
   }
 
+  /**
+   * Récupère la liste des cras en lui passant l'index de la semaine à récupérer
+   * @param index
+   */
   getCraToServer(index: number): void {
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCra(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
     response.subscribe(reponse => {
-      console.log(reponse);
-      if (reponse.liste_cra != null && reponse.liste_cra.length > 0){
+      if(reponse.status == 'OK'){
+        console.log(reponse)
+        if (reponse.liste_cra != null && reponse.liste_cra.length > 0){
 
-        this.transform(reponse.liste_cra, index);
-        // for (const elem of this.listeCraWeek[index].listeCra) {
-        //   elem.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
-        //     new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
-        //     new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
-        //   this.listeCr = [new CompteRendu(elem.id_cra, 'test', 0, '#F5E0E5'),
-        //     new CompteRendu(elem.id_cra, 'test1', 0, '#C4DBFA'),
-        //     new CompteRendu(elem.id_cra, 'test2', 0, '#DDF7DB')];
-        // }
-        // this.emitCraSubject();
-        this.getCraWeekStatus(index);
-      }else{
-            this.addCraWeek(index);
-            this.addCraServer(index);
+          this.transform(reponse.liste_cra, index);
+          this.getCraWeekStatus(index);
+        }else{
+          this.addCraWeek(index);
+          this.addCraServer(index);
+        }
+        this.getDistinctCommandsWeek(index);
       }
-      this.getDistinctCommandsWeek(index);
+      else{
+        console.log("Erreur de requete de base de données");
+      }
     });
   }
+
+  /**
+   * Récupère la liste des commandes d'une semaine pour un utilisateur
+   * @param index
+   */
   getDistinctCommandsWeek(index: number): void{
     const requestUrl = environment.urlCommande + '/' + this.listeCraWeek[index].firstDateWeekFormat + '/' + this.listeCraWeek[index].lastDateWeekFormat + '/' + '10' ;
     this.httpClient.get<BigCommande>(requestUrl, this.httpOptions).subscribe(
@@ -247,11 +341,22 @@ export class CraService {
       }
     );
   }
+
+  /**
+   * Ajoute + 1 à la date actuelle et renvoie le résultat sous forme de string bien formé
+    * @param date
+   * @param nbDays
+   */
   addJour(date: Date, nbDays: number): string {
     const res = new Date(date);
     res.setDate(res.getDate() + nbDays);
     return formatDate(res, 'yyyy-MM-dd', 'fr');
   }
+
+  /**
+   * Sauvegarde une semaine de CRA
+    * @param index
+   */
   saveCra(index: number){
     console.log('je passe bien ici');
     const send: CompteRenduInsert[] = [];
@@ -262,44 +367,85 @@ export class CraService {
     }
     console.log(send);
     const json =  JSON.stringify(send);
-    this.httpClient.put(environment.urlCr, json, this.httpOptions).subscribe(
+    this.httpClient.put<Result>(environment.urlCr, json, this.httpOptions).subscribe(
       response => {
-        console.log(response);
+        if(response.status == 'OK'){
+          console.log(response);
+        }
+        else{
+          console.log("Erreur de requete de base de données");
+        }
       },
       error => {
         console.log(error + 'le serveur ne répond pas ');
       }
     );
   }
+
+  /**
+   * renvoie le status du cra Semaine passé en paramètre
+   * @param index
+   */
   getCraWeekStatus(index: number): void{
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.getCraWeekStatus(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
 
     response.subscribe(reponse => {
-      console.log(" je récupère le status" + reponse);
-      this.listeCraWeek[index].setStatus(reponse.statusCra);
-      console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" );
-      this.emitCraSubject();
+      if(reponse.status == 'OK'){
+        console.log(" je récupère le status" + reponse);
+        this.listeCraWeek[index].setStatus(reponse.statusCra);
+        console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" );
+        this.emitCraSubject();
+      }
+      else {
+        console.log("Erreur de requete de base de données");
+      }
     });
   }
+
+  /**
+   * Appel API pour ajouter une semaine de cra
+    * @param index
+   */
   addCraWeek(index: number){
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.addCraWeek(new CraWeekInsert(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '0', '10'));
     response.subscribe(reponse => {
-      console.log("pppp pppp " + reponse);
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
       //this.emitCraSubject();
     });
   }
+
+  /**
+   * Met à jour le statusCra d'une semaine précise d'un utilisateur
+    * @param index
+   * @param status
+   */
   updateStatusCraUtilisateur(index: number, status: string){
     const craHttp = new CraHttpDatabase(this.httpClient);
     const response = craHttp.updateStatusCraWeek(new CraWeekInsert(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, status, '10'));
     response.subscribe(reponse => {
-      console.log(reponse);
-      this.listeCraWeek[index].status = status;
-      console.log("liste craweek index "+ this.listeCraWeek[index].status);
-      this.emitCraSubject();
+      if(reponse.status == 'OK'){
+        console.log(reponse);
+        this.listeCraWeek[index].status = status;
+        console.log("liste craweek index "+ this.listeCraWeek[index].status);
+        this.emitCraSubject();
+      }
+      else{
+        console.log("Erreur de requete de base de données");
+      }
     });
   }
+
+  /**
+   * Appel API afin d'ajouter des cras en base de donnée
+    * @param index
+   */
   addCraServer(index: number): void {
     console.log('je rentre bien ici !! post');
     // tslint:disable-next-line:ban-types
@@ -310,9 +456,15 @@ export class CraService {
     }
     const json =  JSON.stringify(listeCraWeek);
     console.log(json);
-    this.httpClient.post(environment.urlCra, json, this.httpOptions).subscribe(
+    this.httpClient.post<Result>(environment.urlCra, json, this.httpOptions).subscribe(
       response => {
         console.log(response);
+        if(response.status == 'OK'){
+          console.log(response);
+        }
+        else{
+          console.log("Erreur de requete de base de données");
+        }
       },
       error => {
         console.log(error + 'le serveur ne répond pas ');
@@ -320,6 +472,9 @@ export class CraService {
     );
   }
 
+  /**
+   * remplie trois semaines de CRA
+   */
   fillWeeks(){
   this.getCraToServer( 0);
   this.getCraToServer( 1);
@@ -332,16 +487,11 @@ export class CraService {
     // this.listeCra = this.selectedWeek.listeCra;
   }
 
-  remplirTest(craWeek: CraWeek) {
-    for (let i = 0; i < 5; i++) {
-      const cra = new Cra(0, 10, new Date(this.addJour(craWeek.firstDateWeek, i)), 0, 0, []);
-      cra.listeCr = [new CompteRendu(cra.id_cra, 'test', 0, '#F5E0E5'),
-        new CompteRendu(cra.id_cra, 'test1', 0, '#C4DBFA'),
-        new CompteRendu(cra.id_cra, 'test2', 0, '#DDF7DB')];
-      craWeek.listeCra.push(cra);
-    }
-    this.emitCraSubject();
-  }
+  /**
+   * supprime une ligne correspondant à une commande précise dans notre semaine (suppression des comptes rendus)
+   * @param commande
+   * @param index
+   */
   deleteLineToServer(commande: CommandeInsert, index: number){
     console.log("ooooooooooooooooo ooooooooo "+ commande.id);
     const requestUrl = environment.urlCr +'?commande=' + commande.id + '&date_start=' + this.listeCraWeek[index].firstDateWeekFormat + '&date_end=' + this.listeCraWeek[index].lastDateWeekFormat  + '&id_usr=' + '10' ;
@@ -356,6 +506,11 @@ export class CraService {
       }
     );
   }
+
+  /**
+   * Set status congé jamais utilisé car on ne modifie jamais le status du congé
+    * @param index
+   */
   setStatusCongeUserToServer(index: number){
     console.log('je passe bien ici dans l update de status');
     const json =  JSON.stringify(this.transformToInsertCra(this.listeCraWeek[index].listeCra));
@@ -370,9 +525,22 @@ export class CraService {
       }
     );
   }
+
+  /**
+   * Met à jour le status d'un craWeek (validé par l'utilisateur)
+   * @param index
+   * @param status
+   */
   setStatusUser(index: number, status: string){
     this.updateStatusCraUtilisateur(index, status);
   }
+
+  /**
+   * Appel API plus au service pour supprimer une ligne dans notre cra à la semaine (c'est à dire supprimer une commande)
+   *
+   * @param commande
+   * @param index
+   */
   deleteLine(commande: CommandeInsert, index: number){
     for (const cra of this.listeCraWeek[index].listeCra){
       for (const cr of cra.listeCr){

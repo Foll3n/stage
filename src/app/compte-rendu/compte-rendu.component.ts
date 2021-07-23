@@ -31,46 +31,39 @@ export class CompteRenduComponent implements OnInit {
 
   }
 
-  //ngOnChanges(changes: SimpleChanges) {
-  //for (const prop in changes){
-  //if (changes.hasOwnProperty(prop)){
-  //switch (prop){
-  //case 'duree': {
-  //console.log('la durée a été changé');
-  //}
-  //}
-  //}
-  //}
-  //console.log('je change');
-  //}
-
-  supprimer() {
-    this.onModifyCase();
-  }
-
   ngOnInit(): void {
-    console.log(">Wwwwwwwwwwwwwwwwwwwww " + this.index, +" "+ this.duree + "   " );
       this.dureeString = this.duree.toString();
       if (this.dureeString == '0'){
         this.dureeString = '' ;
       }
   }
 
-
+  /**
+   * Fonction appelée lorsque l'on modifie une case de notre emploi du temps à la semaine
+   */
   onModifyCase() {
 
     this.craService.editCraDuree(this.idCra, +this.dureeString, this.index, this.indexWeek);
     // this.craService.getCraById(this.idCra, this.indexWeek);
   }
 
+  /**
+   * retourne la durée totale d'un compte rendu
+   */
   checkDureeTotale() {
     return this.cra.duree_totale;
   }
 
+  /**
+   * renvoie la couleur de la case actuelle
+   */
   getColor() {
     return this.color;
   }
 
+  /**
+   * Permet de mettre la durée d'une case à 1
+   */
   setDureeToOne() {
     const duree = this.craService.getDureeTotaleCra(this.idCra, this.indexWeek);
     this.dureeString = (1 - duree).toPrecision(1).toString();
