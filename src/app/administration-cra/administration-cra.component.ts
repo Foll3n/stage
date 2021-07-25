@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {CraWeekInsert} from '../models/craWeekInsert';
 import {CraHttpDatabase} from '../configuration/CraHttpDatabase';
 import {HttpClient} from '@angular/common/http';
@@ -7,25 +7,39 @@ import {CraService} from '../../services/cra.service';
 import {CraWeek} from '../models/craWeek';
 import {InsertCra} from '../models/InsertCra';
 import {CompteRendu} from '../models/CompteRendu';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTable} from '@angular/material/table';
+import {
+  TableCongesEnAttenteDataSource,
+  TableCongesEnAttenteItem
+} from '../conges-en-attente/table-conges-en-attente/table-conges-en-attente-datasource';
+import {TableCraAdministration, TableCraItem} from './TableCraAdministraton';
 
 @Component({
   selector: 'app-administration-cra',
   templateUrl: './administration-cra.component.html',
   styleUrls: ['./administration-cra.component.scss']
 })
-export class AdministrationCraComponent implements OnInit {
+export class AdministrationCraComponent implements OnInit{
+
 
   display = false;
   listeCraWaiting: CraWeekInsert[] = [];
   listeCraValidate: CraWeekInsert[] = [];
   actualWeek!: CraWeek | undefined;
-  constructor(private httpClient: HttpClient, private craService: CraService) {
-    this.fillListeCraWaiting();
-    this.fillListeCraValidate();
-    this.listeCraValidate = this.sortList(this.listeCraValidate);
+
+
+  constructor(private httpClient : HttpClient) {
+
+
+
+    // this.listeCraValidate = this.sortList(this.listeCraValidate);
   }
 
   ngOnInit(): void {
+    this.fillListeCraWaiting();
+    this.fillListeCraValidate();
   }
 
   /**
@@ -49,8 +63,10 @@ export class AdministrationCraComponent implements OnInit {
     const response = craHttp.getCraWeekWaiting(1);
     response.subscribe(reponse => {
       if(reponse.status == 'OK'){
-        console.log(reponse);
+        console.log(" --------" +reponse);
+        // this.listeCraWaiting = this.sortList(reponse.listeCraWeek);
         this.listeCraWaiting = this.sortList(reponse.listeCraWeek);
+
       }
       else{
         console.log("Erreur de requete de base de données");
@@ -177,17 +193,22 @@ export class AdministrationCraComponent implements OnInit {
     * @param liste
    */
   sortList(liste: CraWeekInsert[]){
-    const sortedArray: CraWeekInsert[] = liste.sort((obj1, obj2) => {
-      if (obj1.dateStart < obj2.dateStart) {
-        return 1;
-      }
-      else{
-        return -1;
-      }
-      return 0;
-    });
-    return sortedArray;
+
+    if (!liste) { return []; }
+
+      const sortedArray: CraWeekInsert[] = liste.sort((obj1, obj2) => {
+        if (obj1.dateStart < obj2.dateStart) {
+          return 1;
+        }
+        else{
+          return -1;
+        }
+        return 0;
+      });
+      return sortedArray;
   }
+
+
   test(){
     console.log("test");
   }

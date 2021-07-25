@@ -9,46 +9,47 @@
   <!---------Comptes rendus en cours de validation ----------------------->
   <!------------------------------------------------------------------------------------------>
 
-  <mat-expansion-panel hideToggle>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Comptes rendus en cours de validation
-      </mat-panel-title>
-      <mat-panel-description>
-        {{this.listeCraWaiting.length}} Comptes rendus en attente
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <table class="table table-striped" *ngIf="this.listeCraWaiting.length > 0">
-      <thead >
-      <tr >
-        <th scope="col" sortable="dateStart"  >Date de début</th>
-        <th scope="col" sortable="dateEnd" >Date de fin</th>
-        <th scope="col" sortable="nom" >Nom</th>
-        <th scope="col" sortable="nom" >prenom</th>
-        <th scope="col" sortable="nom" ></th>
-        <!--          (sort)="onSort($event)"-->
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let cra of this.listeCraWaiting" >
-        <!--          <th scope="row">{{ cra.dateStart }}</th>-->
-        <td >{{ cra.dateStart  }}</td>
-        <td>{{ cra.dateEnd  }}</td>
-        <td>{{ cra.nomUsername  }}</td>
-        <td>{{ cra.prenomUsername  }}</td>
-        <td>
-          <button type="button" (click)="consulter(cra)" class="btn btn-dark">Consulter</button>
-          <button type="button" (click)="validerCra(cra)" class="btn btn-success">Valider</button>
-          <button type="button" (click)="refuserCra(cra)" class="btn btn-danger">Refuser</button>
+<!--  <mat-expansion-panel hideToggle>-->
+<!--    <mat-expansion-panel-header>-->
+<!--      <mat-panel-title>-->
+<!--        Comptes rendus en cours de validation-->
+<!--      </mat-panel-title>-->
+<!--      <mat-panel-description>-->
+<!--        {{this.listeCraWaiting.length}} Comptes rendus en attente-->
+<!--      </mat-panel-description>-->
+<!--    </mat-expansion-panel-header>-->
+<!--    <table mdbTable class="z-depth-1" *ngIf="this.listeCraWaiting.length > 0">-->
+<!--      <thead >-->
+<!--      <tr>-->
+<!--        <th *ngFor="let col of headTableElements;-->
+<!--         let i = index" scope="col"-->
+<!--            [mdbTableSort]="headTableElements"-->
+<!--            [sortBy]="headTableElements[i]">{{col | titlecase}}-->
+<!--          <mdb-icon fas icon="sort"></mdb-icon>-->
+<!--        </th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let cra of this.listeCraWaiting" >-->
+<!--        &lt;!&ndash;          <th scope="row">{{ cra.dateStart }}</th>&ndash;&gt;-->
+<!--        <td >{{ cra.dateStart  }}</td>-->
+<!--        <td>{{ cra.dateEnd  }}</td>-->
+<!--        <td>{{ cra.nomUsername  }}</td>-->
+<!--        <td>{{ cra.prenomUsername  }}</td>-->
+<!--        <td>-->
+<!--          <button type="button" (click)="consulter(cra)" class="btn btn-dark">Consulter</button>-->
+<!--          <button type="button" (click)="validerCra(cra)" class="btn btn-success">Valider</button>-->
+<!--          <button type="button" (click)="refuserCra(cra)" class="btn btn-danger">Refuser</button>-->
 
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </mat-expansion-panel>
+<!--        </td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </mat-expansion-panel>-->
   <!------------------------------------------------------------------------------------------>
   <!---------Comptes rendus validés---------------------->
   <!------------------------------------------------------------------------------------------>
+
   <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -58,27 +59,16 @@
         {{this.listeCraValidate.length}} comptes rendus validés
       </mat-panel-description>
     </mat-expansion-panel-header>
-    <table class="table table-striped">
-      <thead>
-      <tr>
-        <th scope="col" sortable="dateStart" >Date de début</th>
-        <th scope="col" sortable="dateEnd" >Date de fin</th>
-        <th scope="col" sortable="nom" >Nom</th>
-        <th scope="col" sortable="nom" >prenom</th>
-        <th scope="col" sortable="nom" ></th>
-        <!--          (sort)="onSort($event)"-->
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let cra of this.listeCraValidate">
-        <!--          <th scope="row">{{ cra.dateStart }}</th>-->
-        <td>{{ cra.dateStart  }}</td>
-        <td>{{ cra.dateEnd  }}</td>
-        <td>{{ cra.nomUsername  }}</td>
-        <td>{{ cra.prenomUsername  }}</td>
-      </tr>
-      </tbody>
-    </table>
+
+
+    <app-table-cra-en-attente></app-table-cra-en-attente> // passer un idex en parametre
+
+
+
+
+
+
+
   </mat-expansion-panel>
 
 </mat-accordion>

@@ -10,9 +10,11 @@ import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.compo
 import {CompteRenduActiviteComponent} from './compte-rendu-activite/compte-rendu-activite.component';
 import {AdministrationCraComponent} from './administration-cra/administration-cra.component';
 import {AdministrationProjetComponent} from './administration-projet/administration-projet.component';
+import {CalendarMounthComponent} from './calendar-mounth/calendar-mounth.component';
 
 const routes: Routes = [
   { path: 'administration-projet', component : AdministrationProjetComponent},
+  { path: 'calendar', component : CalendarMounthComponent},
   { path: 'compte-rendu-activite', component : CompteRenduActiviteComponent},
   { path: 'administration-cra', component : AdministrationCraComponent},
   { path: 'connexion', component: ConnexionComponent },

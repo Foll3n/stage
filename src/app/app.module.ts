@@ -64,6 +64,12 @@ import { AddProjetComponent } from './add-projet/add-projet.component';
 import { AddCommandeComponent } from './add-commande/add-commande.component';
 import {ProjetService} from '../services/projet.service';
 import {CommandeService} from '../services/commande.service';
+import { CalendarMounthComponent } from './calendar-mounth/calendar-mounth.component';
+import {CalendarModule, CalendarMonthModule, DateAdapter} from 'angular-calendar';
+import {RouterModule} from '@angular/router';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+import {MDBBootstrapModule} from 'angular-bootstrap-md';
+import { TableCraEnAttenteComponent } from './table-cra-en-attente/table-cra-en-attente.component';
 
 registerLocaleData(localeFr, 'fr');
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
@@ -97,6 +103,8 @@ registerLocaleData(localeFr, 'fr');
     AdministrationProjetComponent,
     AddProjetComponent,
     AddCommandeComponent,
+    CalendarMounthComponent,
+    TableCraEnAttenteComponent,
   ],
   imports: [
     BrowserModule,
@@ -127,7 +135,12 @@ registerLocaleData(localeFr, 'fr');
     MatTabsModule,
     MatCheckboxModule,
     MatExpansionModule,
-    ColorPickerModule
+    ColorPickerModule,
+    CalendarMonthModule,
+    CalendarModule,
+    CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
+    MDBBootstrapModule.forRoot(),
+    MDBBootstrapModule,
   ],
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
   providers: [CraService, UserService, ProjetService, CommandeService],

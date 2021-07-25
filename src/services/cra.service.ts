@@ -307,7 +307,7 @@ export class CraService {
     const response = craHttp.getCra(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
     response.subscribe(reponse => {
       if(reponse.status == 'OK'){
-        console.log(reponse)
+        console.log("-------"+reponse);
         if (reponse.liste_cra != null && reponse.liste_cra.length > 0){
 
           this.transform(reponse.liste_cra, index);
