@@ -1,4 +1,4 @@
-import {CompteRendu} from './CompteRendu';
+import {CompteRendu} from '../compteRendu/CompteRendu';
 
 export class Cra {
   constructor(

@@ -3,10 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { map } from 'rxjs/operators';
 import { Observable, of as observableOf, merge } from 'rxjs';
-import {CraHttpDatabase} from '../configuration/CraHttpDatabase';
+import {CraHttpDatabase} from '../../configuration/CraHttpDatabase';
 import {HttpClient} from '@angular/common/http';
-import {InsertCra} from '../models/InsertCra';
-import {CraWeekInsert} from '../models/craWeekInsert';
+import {InsertCra} from '../models/cra/InsertCra';
+import {CraWeekInsert} from '../models/logCra/craWeekInsert';
 import {AfterViewInit, OnInit} from '@angular/core';
 
 // TODO: Replace this with your own data model type

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Projet} from '../models/Projet';
+import {Projet} from '../Cra/models/projet/Projet';
 import {ProjetService} from '../../services/projet.service';
 import {FormControl, FormGroup} from '@angular/forms';
 

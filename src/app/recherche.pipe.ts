@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Facture } from './models/facture';
+import { Facture } from './Cra/models/facture';
 
 @Pipe({
   name: 'recherche'

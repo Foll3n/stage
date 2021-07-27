@@ -1,13 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {Cra} from '../models/Cra';
-import {CompteRendu} from '../models/CompteRendu';
+import {Cra} from '../models/cra/Cra';
+import {CompteRendu} from '../models/compteRendu/CompteRendu';
 import {Subscription} from 'rxjs';
-import {CraService} from '../../services/cra.service';
+import {CraService} from '../../../services/cra.service';
 import {NgbCarousel, NgbCarouselConfig, NgbSlideEvent, NgbSlideEventSource} from '@ng-bootstrap/ng-bootstrap';
-import {CraWeek} from '../models/craWeek';
-import {CommandeInsert} from '../models/CommandeInsert';
-import {UserService} from '../../services/user.service';
-import {Realisation} from '../models/Realisation';
+import {CraWeek} from '../models/cra/craWeek';
+import {CommandeInsert} from '../models/commande/CommandeInsert';
+import {UserService} from '../../../services/user.service';
+import {Realisation} from '../models/realisation/Realisation';
 
 @Component({
   selector: 'app-compte-rendu-activite',

@@ -1,9 +1,9 @@
-import {CompteRendu} from './CompteRendu';
+import {CompteRendu} from '../compteRendu/CompteRendu';
 import {Cra} from './Cra';
 import {formatDate} from '@angular/common';
-import {CommandeInsert} from './CommandeInsert';
-import {environment} from '../../environments/environment';
-import {BigCommande} from './BigCommande';
+import {CommandeInsert} from '../commande/CommandeInsert';
+import {environment} from '../../../../environments/environment';
+import {BigCommande} from '../commande/BigCommande';
 
 
 export class CraWeek {

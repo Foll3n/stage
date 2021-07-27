@@ -1,5 +1,5 @@
-import {InsertCra} from './InsertCra';
-import {Cra} from './Cra';
+import {InsertCra} from '../cra/InsertCra';
+import {Cra} from '../cra/Cra';
 import {CommandeInsert} from './CommandeInsert';
 
 export class BigCommande {

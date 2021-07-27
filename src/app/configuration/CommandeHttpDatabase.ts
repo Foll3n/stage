@@ -1,17 +1,17 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { environment} from '../../environments/environment';
-import { InsertCra} from '../models/InsertCra';
-import {Big} from '../models/Big';
-import {BigCommande} from '../models/BigCommande';
-import {BigRealisation} from '../models/BigRealisation';
-import {CompteRendu} from '../models/CompteRendu';
-import {CompteRenduInsert} from '../models/CompteRenduInsert';
-import {BigProjet} from '../models/BigProjet';
-import {Projet} from '../models/Projet';
-import {CommandeInsert} from '../models/CommandeInsert';
-import {RealisationPost} from '../models/RealisationPost';
-import {Result} from '../models/Result';
+import { InsertCra} from '../Cra/models/cra/InsertCra';
+import {Big} from '../Cra/models/cra/Big';
+import {BigCommande} from '../Cra/models/commande/BigCommande';
+import {BigRealisation} from '../Cra/models/realisation/BigRealisation';
+import {CompteRendu} from '../Cra/models/compteRendu/CompteRendu';
+import {CompteRenduInsert} from '../Cra/models/compteRendu/CompteRenduInsert';
+import {BigProjet} from '../Cra/models/projet/BigProjet';
+import {Projet} from '../Cra/models/projet/Projet';
+import {CommandeInsert} from '../Cra/models/commande/CommandeInsert';
+import {RealisationPost} from '../Cra/models/realisation/RealisationPost';
+import {Result} from '../Cra/models/Result';
 
 /**
  * Class qui regroupe l'ensemble des appels API de l'api Commande

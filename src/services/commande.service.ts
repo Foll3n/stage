@@ -3,11 +3,11 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {CommandeHttpDatabase} from '../app/configuration/CommandeHttpDatabase';
 import {Subject} from 'rxjs';
-import {Realisation} from '../app/models/Realisation';
-import {Projet} from '../app/models/Projet';
+import {Realisation} from '../app/Cra/models/realisation/Realisation';
+import {Projet} from '../app/Cra/models/projet/Projet';
 import {ProjetHttpDatabase} from '../app/configuration/ProjetHttpDatabase';
-import {CommandeInsert} from '../app/models/CommandeInsert';
-import {RealisationPost} from '../app/models/RealisationPost';
+import {CommandeInsert} from '../app/Cra/models/commande/CommandeInsert';
+import {RealisationPost} from '../app/Cra/models/realisation/RealisationPost';
 
 
 @Injectable()

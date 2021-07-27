@@ -1,8 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClientModule, HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Facture} from '../models/facture';
+import {Facture} from '../Cra/models/facture';
 import { ConnexionComponent } from "../connexion/connexion.component";
-import { Categories1 } from "../models/categorie";
+import { Categories1 } from "../Cra/models/categorie";
 import {NgbDate, NgbCalendar, NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import {environment} from "../../environments/environment";
 

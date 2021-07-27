@@ -13,12 +13,12 @@ import {
   CalendarEventTimesChangedEvent, CalendarMonthViewBeforeRenderEvent,
   CalendarView
 } from 'angular-calendar';
-import {Cra} from '../models/Cra';
-import {CompteRenduInsert} from '../models/CompteRenduInsert';
-import {CraService} from '../../services/cra.service';
-import {CalendarService} from '../../services/calendar.service';
-import {CraWeekInsert} from '../models/craWeekInsert';
-import {InsertCra} from '../models/InsertCra';
+import {Cra} from '../models/cra/Cra';
+import {CompteRenduInsert} from '../models/compteRendu/CompteRenduInsert';
+import {CraService} from '../../../services/cra.service';
+import {CalendarService} from '../../../services/calendar.service';
+import {CraWeekInsert} from '../models/logCra/craWeekInsert';
+import {InsertCra} from '../models/cra/InsertCra';
 import {Router} from '@angular/router';
 
 

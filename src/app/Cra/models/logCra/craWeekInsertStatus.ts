@@ -1,4 +1,4 @@
-import {CompteRendu} from './CompteRendu';
+import {CompteRendu} from '../compteRendu/CompteRendu';
 import {CraWeekInsert} from './craWeekInsert';
 
 export class CraWeekInsertStatus {

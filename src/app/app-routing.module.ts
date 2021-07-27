@@ -6,11 +6,11 @@ import { AjouterComponent } from './ajouter/ajouter.component';
 import { UtilisateursComponent } from './utilisateurs/utilisateurs.component';
 import {VisualisationCongesComponent} from './visualisation-conges/visualisation-conges.component';
 import {CongesEnAttenteComponent} from './conges-en-attente/conges-en-attente.component';
-import {CompteRenduVueComponent} from './compte-rendu-vue/compte-rendu-vue.component';
-import {CompteRenduActiviteComponent} from './compte-rendu-activite/compte-rendu-activite.component';
-import {AdministrationCraComponent} from './administration-cra/administration-cra.component';
-import {AdministrationProjetComponent} from './administration-projet/administration-projet.component';
-import {CalendarMounthComponent} from './calendar-mounth/calendar-mounth.component';
+import {CompteRenduVueComponent} from './Cra/compte-rendu-vue/compte-rendu-vue.component';
+import {CompteRenduActiviteComponent} from './Cra/compte-rendu-activite/compte-rendu-activite.component';
+import {AdministrationCraComponent} from './Cra/administration-cra/administration-cra.component';
+import {AdministrationProjetComponent} from './Cra/administration-cra/administration-projet/administration-projet.component';
+import {CalendarMounthComponent} from './Cra/calendar-mounth/calendar-mounth.component';
 
 const routes: Routes = [
   { path: 'administration-projet', component : AdministrationProjetComponent},

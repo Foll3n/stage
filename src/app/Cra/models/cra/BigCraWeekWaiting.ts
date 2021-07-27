@@ -1,4 +1,4 @@
-import {CraWeekInsert} from './craWeekInsert';
+import {CraWeekInsert} from '../logCra/craWeekInsert';
 
 export class BigCraWeekWaiting {
   constructor(

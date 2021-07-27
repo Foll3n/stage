@@ -1,5 +1,5 @@
-import {CompteRendu} from './CompteRendu';
-import {CompteRenduInsert} from './CompteRenduInsert';
+import {CompteRendu} from '../compteRendu/CompteRendu';
+import {CompteRenduInsert} from '../compteRendu/CompteRenduInsert';
 
 export class InsertCra {
   constructor(

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import {Projet} from '../models/Projet';
+import {Projet} from '../models/projet/Projet';
 import {Subscription} from 'rxjs';
-import {ProjetService} from '../../services/projet.service';
-import {CommandeInsert} from '../models/CommandeInsert';
-import {RealisationPost} from '../models/RealisationPost';
+import {ProjetService} from '../../../services/projet.service';
+import {CommandeInsert} from '../models/commande/CommandeInsert';
+import {RealisationPost} from '../models/realisation/RealisationPost';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {CommandeHttpDatabase} from '../configuration/CommandeHttpDatabase';
+import {CommandeHttpDatabase} from '../../configuration/CommandeHttpDatabase';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {ProjetHttpDatabase} from '../configuration/ProjetHttpDatabase';
+import {ProjetHttpDatabase} from '../../configuration/ProjetHttpDatabase';
 
 @Component({
   selector: 'app-add-commande',

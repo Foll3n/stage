@@ -1,14 +1,14 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { environment} from '../../environments/environment';
-import { InsertCra} from '../models/InsertCra';
-import {Big} from '../models/Big';
-import {BigCraWeek} from '../models/BigCraWeek';
-import {CraWeekInsert} from '../models/craWeekInsert';
-import {BigCraWeekWaiting} from '../models/BigCraWeekWaiting';
-import {BigCraCalendar} from '../models/BigCraCalendar';
-import {CraWeekInsertStatus} from '../models/craWeekInsertStatus';
-import {Cra} from '../models/Cra';
+import { InsertCra} from '../Cra/models/cra/InsertCra';
+import {Big} from '../Cra/models/cra/Big';
+import {BigCraWeek} from '../Cra/models/cra/BigCraWeek';
+import {CraWeekInsert} from '../Cra/models/logCra/craWeekInsert';
+import {BigCraWeekWaiting} from '../Cra/models/cra/BigCraWeekWaiting';
+import {BigCraCalendar} from '../Cra/models/logCra/BigCraCalendar';
+import {CraWeekInsertStatus} from '../Cra/models/logCra/craWeekInsertStatus';
+import {Cra} from '../Cra/models/cra/Cra';
 /**
  * Class qui regroupe l'ensemble des appels API de l'api Cra
  */

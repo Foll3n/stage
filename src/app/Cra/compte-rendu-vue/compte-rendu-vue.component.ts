@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Cra} from '../models/Cra';
-import {CraService} from '../../services/cra.service';
+import {Cra} from '../models/cra/Cra';
+import {CraService} from '../../../services/cra.service';
 import {Subscription} from 'rxjs';
-import {CompteRendu} from '../models/CompteRendu';
-import {CraWeek} from '../models/craWeek';
-import {CommandeInsert} from '../models/CommandeInsert';
+import {CompteRendu} from '../models/compteRendu/CompteRendu';
+import {CraWeek} from '../models/cra/craWeek';
+import {CommandeInsert} from '../models/commande/CommandeInsert';
 
 @Component({
     selector: 'app-compte-rendu-vue',

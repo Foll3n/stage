@@ -1,16 +1,16 @@
 import {Injectable} from '@angular/core';
-import {Cra} from '../app/models/Cra';
+import {Cra} from '../app/Cra/models/cra/Cra';
 import {Subject} from 'rxjs';
-import {CompteRendu} from '../app/models/CompteRendu';
+import {CompteRendu} from '../app/Cra/models/compteRendu/CompteRendu';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {formatDate} from '@angular/common';
 import {environment} from '../environments/environment';
-import {InsertCra} from '../app/models/InsertCra';
+import {InsertCra} from '../app/Cra/models/cra/InsertCra';
 import {CraHttpDatabase} from '../app/configuration/CraHttpDatabase';
-import {CraWeek} from '../app/models/craWeek';
-import {CompteRenduInsert} from '../app/models/CompteRenduInsert';
-import {CommandeInsert} from '../app/models/CommandeInsert';
-import {BigCommande} from '../app/models/BigCommande';
+import {CraWeek} from '../app/Cra/models/cra/craWeek';
+import {CompteRenduInsert} from '../app/Cra/models/compteRendu/CompteRenduInsert';
+import {CommandeInsert} from '../app/Cra/models/commande/CommandeInsert';
+import {BigCommande} from '../app/Cra/models/commande/BigCommande';
 
 @Injectable()
 export class CraWeekService {

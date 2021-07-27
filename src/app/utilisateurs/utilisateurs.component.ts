@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConnexionComponent } from "../connexion/connexion.component";
 import { HttpClient , HttpHeaders } from "@angular/common/http";
 import {FormControl, FormGroup} from "@angular/forms";
-import {Utilisateur } from "../models/utilisateur";
+import {Utilisateur } from "../Cra/models/utilisateur";
 import {environment} from "../../environments/environment";
 
 export class Role{
