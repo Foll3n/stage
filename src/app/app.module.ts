@@ -70,12 +70,17 @@ import {RouterModule} from '@angular/router';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {MDBBootstrapModule} from 'angular-bootstrap-md';
 import { TableCraEnAttenteComponent } from './table-cra-en-attente/table-cra-en-attente.component';
+import {CraWaitingService} from '../services/craWaiting.service';
+import {CalendarService} from '../services/calendar.service';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {DialogContent} from './table-cra-en-attente/table-cra-en-attente.component';
 
-registerLocaleData(localeFr, 'fr');
+registerLocaleData(localeFr);
 //import {HashLocationStrategy, LocationStrategy, PathLocationStrategy} from '@angular/common';
 
 
 @NgModule({
+
   declarations: [
     AppComponent,
     NavbarComponent,
@@ -105,6 +110,7 @@ registerLocaleData(localeFr, 'fr');
     AddCommandeComponent,
     CalendarMounthComponent,
     TableCraEnAttenteComponent,
+    DialogContent
   ],
   imports: [
     BrowserModule,
@@ -141,9 +147,11 @@ registerLocaleData(localeFr, 'fr');
     CalendarModule.forRoot({provide: DateAdapter, useFactory: adapterFactory}),
     MDBBootstrapModule.forRoot(),
     MDBBootstrapModule,
+    MatDialogModule
   ],
+
   //providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
-  providers: [CraService, UserService, ProjetService, CommandeService],
+  providers: [CraService, UserService, ProjetService, CommandeService, CraWaitingService, CalendarService],
   bootstrap: [AppComponent]
 })
 

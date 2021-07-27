@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Cra} from '../models/Cra';
 import {CompteRendu} from '../models/CompteRendu';
 import {Subscription} from 'rxjs';
@@ -20,13 +20,29 @@ import {Realisation} from '../models/Realisation';
      /*}*/
   `, `
      /deep/  .carousel-indicators> li {
- background-color: cadetblue;
+            background-color: #97C8E2;
+       box-sizing: content-box;
+       flex: 0 1 auto;
+       width: 30px;
+       height: 20px;
+       border-radius: 20px;
+       margin-right: 3px;
+       margin-left: 3px;
+       text-indent: -999px;
+       cursor: pointer;
+       background-clip: padding-box;
+       border-top: 10px solid transparent;
+       border-bottom: 10px solid transparent;
+       opacity: .5;
+       transition: opacity .6s ease;
+
 }`,
     `
      /deep/  .carousel-indicators {
        position: absolute;
-       top : -20px;
+       top : -80px;
        height: 20px;
+       margin-top: 40px;
 
 
 }`
@@ -42,8 +58,10 @@ import {Realisation} from '../models/Realisation';
 ]
 })
 export class CompteRenduActiviteComponent implements OnInit {
+  @ViewChild('caroussel') myCarousel: NgbCarousel | undefined;
   public craWeek!: CraWeek[] ;
-  selectedWeek = 1;
+  selectedWeek!: number;
+  currentSlide!:string;
   // @Input()
   // date!: number;
 
@@ -59,7 +77,7 @@ export class CompteRenduActiviteComponent implements OnInit {
   public get width() {
     return window.innerWidth;
   }
-  constructor(private craService: CraService, private userService: UserService, config: NgbCarouselConfig) {
+  constructor(public craService: CraService, private userService: UserService, config: NgbCarouselConfig) {
     config.interval = 0;
     config.wrap = false;
     config.keyboard = false;
@@ -67,7 +85,22 @@ export class CompteRenduActiviteComponent implements OnInit {
     config.showNavigationArrows = false;
     config.showNavigationIndicators = true;
   }
+  ngOnInit(){
+    console.log("ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+    this.selectedWeek = this.craService.currentSlide;
+    this.currentSlide ='ngb-slide-' + this.selectedWeek.toString();
+    this.listeCraSubscription = this.craService.craSubject.subscribe(
+      (craWeek: CraWeek[]) => {this.craWeek = craWeek;
+        this.update();
+      });
+    this.realisationSubscription = this.userService.realisationsSubject.subscribe(
+      (realisations: Realisation[]) => {this.listeRealisations = realisations;
+        this.update();
+      });
 
+    console.log('test');
+    this.craService.emitCraSubject();
+  }
   /**
    * Récupère une commande précise réalisée par un utilisateur
    * @param num
@@ -127,19 +160,7 @@ export class CompteRenduActiviteComponent implements OnInit {
     this.firstDate = this.craWeek[this.selectedWeek].firstDate;
     this.lastDate = this.craWeek[this.selectedWeek].lastDate;
   }
-  ngOnInit(){
-    this.listeCraSubscription = this.craService.craSubject.subscribe(
-      (craWeek: CraWeek[]) => {this.craWeek = craWeek;
-                               this.update();
-                                });
-    this.realisationSubscription = this.userService.realisationsSubject.subscribe(
-      (realisations: Realisation[]) => {this.listeRealisations = realisations;
-                                        this.update();
-      });
 
-    console.log('test');
-    this.craService.emitCraSubject();
-  }
 
   /**
    * Ajoute un compte rendu (appel API) -> ajoute une ligne dans mon emploi du temps à la semaine d'une commande précise
@@ -240,6 +261,7 @@ export class CompteRenduActiviteComponent implements OnInit {
    * permet à l'utilisateur de valider sa semaine elle sera donc envoyé aux administrateurs afin qu'ils la valident définitivement
     */
   save(){
+    this.push();
     this.craService.setStatusUser(this.selectedWeek, '1');
   }
 

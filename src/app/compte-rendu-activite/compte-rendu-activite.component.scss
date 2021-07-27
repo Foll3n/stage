@@ -123,27 +123,44 @@
   border-radius: 20px;
   border: 1px;
 }
-
+.topCra{
+  margin: 20px;
+}
 .add-commande {
   display: inline-block;
-  padding: 10px;
+  padding: 2px;
   margin: 0px;
   position: absolute;
   right: 5%;
+  border-radius: 10px;
+  background: #C9DAE3;
+}
+.enregistrer{
+  display: inline-block;
+  padding: 5px;
+  margin: 0px;
+  position: absolute;
+  right: 5%;
+  background: #C9DAE3;
+  color: #053F5E;
 }
 .set-status{
   display: inline-block;
-  padding: 10px;
+  padding: 5px;
   margin: 0px;
   position: absolute;
   right: 12%;
+  background: #C9DAE3;
+  color: #053F5E;
+
 }
 .message-status{
   display: inline-block;
   padding: 10px;
   margin: 0px;
   position: absolute;
-  right: 12%;
+  right: 5%;
+
 }
 add-commande-responsive {
 

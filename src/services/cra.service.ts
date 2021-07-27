@@ -16,11 +16,11 @@ import {Result} from '../app/models/Result';
 
 @Injectable()
 /**
- * Service uniquement utilisable dans la vue du compte rendu à la semaine0
+ * Service uniquement utilisable dans la vue du compte rendu à la semaine
  */
 export class CraService {
+  public back!: boolean;
   constructor(private httpClient: HttpClient) {
-    this.dateDay = new Date();
     this.httpOptions.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: 'Basic ' + btoa(sessionStorage.getItem('ndc') + ':' + sessionStorage.getItem('mdp'))
@@ -31,7 +31,7 @@ export class CraService {
   httpOptions = {
     headers: new HttpHeaders()
   };
-  dateDay: Date;
+  currentSlide!: number;
   dateToday!: Date;
   listeCraWeek!: CraWeek[];
   craWeekLast!: CraWeek ;
@@ -45,17 +45,53 @@ export class CraService {
    * Initialise notre service du cra à la semaine en lui passant une date
    * @param date
    */
-  initialisation(date: Date){
-    this.dateDay = new Date(date);
+  initialisation(date: Date, back = false){
+    this.back = back;
+
     this.dateToday = new Date();
-    this.listeCraWeek = [];
-    this.craWeekLast = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
-    this.craWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
-    this.craWeekNext = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
-    this.listeCraWeek.push(this.craWeekLast);
-    this.listeCraWeek.push(this.craWeek);
-    this.listeCraWeek.push(this.craWeekNext);
+    // this.listeCraWeek = [];
+    // this.craWeekLast = new CraWeek(0, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() - 7)));
+    // this.craWeek = new CraWeek(1, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
+    // this.craWeekNext = new CraWeek(2, new Date(this.dateDay.setDate(this.dateDay.getDate() - this.dateDay.getDay() + 7)));
+    // this.listeCraWeek.push(this.craWeekLast);
+    // this.listeCraWeek.push(this.craWeek);
+    // this.listeCraWeek.push(this.craWeekNext);
+    // this.fillWeeks();
+    this.initialisationMois(date);
     this.fillWeeks();
+  }
+
+
+  initialisationMois(date:Date) {
+    let save = new Date(date);
+    date.setDate(date.getDate());
+    this.listeCraWeek = [];
+    let day = date.getDay();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    var firstDate = new Date(year, month, 1);
+    if (firstDate.getDay() > 1){
+      firstDate.setDate(firstDate.getDate()-firstDate.getDay());
+    }
+    var lastDate = new Date(year, month+1, 1);
+    if (lastDate.getDay()-1 > 0){
+      lastDate.setDate(lastDate.getDate()+ ( 7 - lastDate.getDay()));
+    }
+    let id = 0;
+    while (firstDate.getTime() < lastDate.getTime()){
+      var diff = (save.getTime() - firstDate.getTime());
+      var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+      console.log("save get time" , save.valueOf(), firstDate.valueOf(), diffDays);
+      if ((diffDays) < 7){
+        this.currentSlide  = id;
+      }
+      this.listeCraWeek.push(new CraWeek(id, firstDate));
+      id++;
+      firstDate.setDate(firstDate.getDate() + 7 );
+    }
+    console.log(this.listeCraWeek);
+
+
   }
   /**
    * permet d'envoyer à touts les composants abonées la liste de cra Semaine
@@ -307,14 +343,14 @@ export class CraService {
     const response = craHttp.getCra(this.listeCraWeek[index].firstDateWeekFormat, this.listeCraWeek[index].lastDateWeekFormat, '10');
     response.subscribe(reponse => {
       if(reponse.status == 'OK'){
-        console.log("-------"+reponse);
-        if (reponse.liste_cra != null && reponse.liste_cra.length > 0){
+        if (reponse.liste_cra != null){
 
           this.transform(reponse.liste_cra, index);
           this.getCraWeekStatus(index);
         }else{
           this.addCraWeek(index);
-          this.addCraServer(index);
+
+          //this.getCraToServer(index);
         }
         this.getDistinctCommandsWeek(index);
       }
@@ -394,7 +430,7 @@ export class CraService {
       if(reponse.status == 'OK'){
         console.log(" je récupère le status" + reponse);
         this.listeCraWeek[index].setStatus(reponse.statusCra);
-        console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" );
+        console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm" + reponse.statusCra );
         this.emitCraSubject();
       }
       else {
@@ -413,6 +449,7 @@ export class CraService {
     response.subscribe(reponse => {
       if(reponse.status == 'OK'){
         console.log(reponse);
+        this.addCraServer(index);
       }
       else{
         console.log("Erreur de requete de base de données");
@@ -461,6 +498,7 @@ export class CraService {
         console.log(response);
         if(response.status == 'OK'){
           console.log(response);
+          this.getCraToServer(index);
         }
         else{
           console.log("Erreur de requete de base de données");
@@ -476,9 +514,12 @@ export class CraService {
    * remplie trois semaines de CRA
    */
   fillWeeks(){
-  this.getCraToServer( 0);
-  this.getCraToServer( 1);
-  this.getCraToServer(2);
+    for(let i=0; i< this.listeCraWeek.length;i++){
+      this.getCraToServer(i);
+    }
+  //
+  // this.getCraToServer( 1);
+  // this.getCraToServer(2);
 
     // this.selectedWeek = this.craWeekNext;
     // this.listeCra = this.selectedWeek.listeCra;

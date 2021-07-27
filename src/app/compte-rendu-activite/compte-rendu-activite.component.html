@@ -1,9 +1,10 @@
 <section class="decalage pbot ">
+  <a *ngIf="this.craService.back" routerLink="/calendar"> Retour au calendrier</a>
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
   <!--div qui afiche le jour actuel la date et le bouton permettant d'ajouter une commande-->
   <!--  -------------------------------------------------------------------------------------------------------------------------------------->
 
-  <div>
+  <div class="topCra">
     <p class="date-jour-afichage">{{this.getDateToday()}}</p>
     <p class="info-semaine">Semaine du {{this.firstDate}}  au {{this.lastDate}} </p>
 
@@ -13,7 +14,7 @@
 
     <mat-form-field appearance="fill" *ngIf="seeButton()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }">
       <mat-label>Ajouter commande</mat-label>
-      <mat-select>
+      <mat-select class="yy">
         <mat-option *ngFor="let com of this.listeAddCommande" [value]="com.id" (click)="addSousProjet(com)">
           {{com.num_com}}
         </mat-option>
@@ -47,7 +48,7 @@
     <div class='col-12'>
 
 
-      <ngb-carousel  #selectedWeek activeId="ngb-slide-1" (slide)="onSlide($event)">
+      <ngb-carousel  #selectedWeek [activeId]="this.currentSlide" (slide)="onSlide($event)">
         ---------------- {{selectedWeek}}-----------------
 
 <!-- On a trois slides dans notre cas on parcours notre table de comptes rendus à la semaine et on créé trois composants qui comporteront le calendrier à la semaine-->
@@ -62,7 +63,7 @@
   </div>
 
 
-      <button *ngIf=" seeButton()" (click)="push()" [ngClass]="{ 'add-commande': width >= 768, 'add-commande-responsive': width < 768 }"
+      <button *ngIf=" seeButton()" (click)="push()" [ngClass]="{ 'enregistrer': width >= 768, 'add-commande-responsive': width < 768 }"
               color="primary" mat-raised-button>Enregistrer
       </button>
   <button *ngIf="canUpdateStatus() && seeButton()" class="set-status" (click)="save()" color="primary" mat-raised-button>Sauvegarder</button>

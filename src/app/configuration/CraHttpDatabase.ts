@@ -6,6 +6,9 @@ import {Big} from '../models/Big';
 import {BigCraWeek} from '../models/BigCraWeek';
 import {CraWeekInsert} from '../models/craWeekInsert';
 import {BigCraWeekWaiting} from '../models/BigCraWeekWaiting';
+import {BigCraCalendar} from '../models/BigCraCalendar';
+import {CraWeekInsertStatus} from '../models/craWeekInsertStatus';
+import {Cra} from '../models/Cra';
 /**
  * Class qui regroupe l'ensemble des appels API de l'api Cra
  */
@@ -25,6 +28,14 @@ export class CraHttpDatabase{
     const requestUrl = href + '/?date_start=' + date_start + '&date_end=' + date_end + '&id_usr=' + id_usr ;// + `${href}/?date_start=${href}&date_end=${date_end}&id_usr=${id_usr}`;
     return this._httpClient.get<Big>(requestUrl, this.httpOptions);
   }
+
+  getAllCra(id_usr: string){
+    const href = environment.urlCra;
+    // tslint:disable-next-line:max-line-length
+    const requestUrl = href + '/' + id_usr ;// + `${href}/?date_start=${href}&date_end=${date_end}&id_usr=${id_usr}`;
+    return this._httpClient.get<Big>(requestUrl, this.httpOptions);
+  }
+
   postCra(listCra: InsertCra[] ){
     const json =  JSON.stringify(listCra);
     const href = environment.urlCra;
@@ -38,10 +49,10 @@ export class CraHttpDatabase{
     const requestUrl = href + '/?dateStart=' + date_start + '&dateEnd=' + date_end + '&idUsr=' + id_usr ;// + `${href}/?date_start=${href}&date_end=${date_end}&id_usr=${id_usr}`;
     return this._httpClient.get<BigCraWeek>(requestUrl, this.httpOptions);
   }
-  getCraWeekWaiting(statusCra: number){
+  getCraWeekWaiting(statusCra: string){
     const href = environment.urlCraWeek;
     // tslint:disable-next-line:max-line-length
-    const requestUrl = href + '/' + statusCra.toString();
+    const requestUrl = href + '/' + statusCra;
     return this._httpClient.get<BigCraWeekWaiting>(requestUrl, this.httpOptions);
   }
   addCraWeek(craWeek: CraWeekInsert){
@@ -51,9 +62,10 @@ export class CraHttpDatabase{
     return this._httpClient.post<CraWeekInsert>(href, json, this.httpOptions);
   }
   updateStatusCraWeek(craWeek: CraWeekInsert){
+    let insertCraWeek = new CraWeekInsertStatus(craWeek, '10');
     const href = environment.urlCraWeek;
     // tslint:disable-next-line:max-line-length
-    const json =  JSON.stringify(craWeek);
-    return this._httpClient.put<CraWeekInsert>(href, json, this.httpOptions);
+    const json =  JSON.stringify(insertCraWeek);
+    return this._httpClient.put<{ status:string }>(href, json, this.httpOptions);
   }
 }

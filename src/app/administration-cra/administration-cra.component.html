@@ -8,6 +8,30 @@
   <!------------------------------------------------------------------------------------------>
   <!---------Comptes rendus en cours de validation ----------------------->
   <!------------------------------------------------------------------------------------------>
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Comptes rendus en attente de validation
+      </mat-panel-title>
+      <mat-panel-description>
+        {{this.listeCraWaiting.length}} comptes rendus en attente
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <app-table-cra-en-attente [index]="''+1"></app-table-cra-en-attente>
+
+
+
+
+
+
+
+  </mat-expansion-panel>
+
+
+
+
 
 <!--  <mat-expansion-panel hideToggle>-->
 <!--    <mat-expansion-panel-header>-->
@@ -61,7 +85,7 @@
     </mat-expansion-panel-header>
 
 
-    <app-table-cra-en-attente></app-table-cra-en-attente> // passer un idex en parametre
+    <app-table-cra-en-attente  [index]="'' + 2"></app-table-cra-en-attente>
 
 
 

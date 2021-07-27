@@ -21,8 +21,9 @@ export class CraWeek {
   public status = '0';
 
   constructor(id: number, dateDay: Date) {
+    dateDay = new Date(dateDay);
     this.id = id;
-    this.dayDate = dateDay;
+    this.dayDate = new Date(dateDay);
     this.firstDateWeek = new Date(dateDay.setDate(dateDay.getDate() - dateDay.getDay() + 1));
     this.firstDateWeekFormat = formatDate(this.firstDateWeek, 'yyyy-MM-dd', 'fr');
     this.lastDateWeek = new Date(dateDay.setDate(dateDay.getDate() - dateDay.getDay() + 7));

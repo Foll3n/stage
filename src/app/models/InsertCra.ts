@@ -8,6 +8,8 @@ export class InsertCra {
     public date: string,
     public duree_totale: string,
     public statusConge: string,
-    public listeCr: CompteRenduInsert[]
+    public listeCr: CompteRenduInsert[],
+    public status?: string
+
   ) {}
 }

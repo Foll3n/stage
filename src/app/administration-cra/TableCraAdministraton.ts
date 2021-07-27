@@ -7,6 +7,7 @@ import {CraHttpDatabase} from '../configuration/CraHttpDatabase';
 import {HttpClient} from '@angular/common/http';
 import {InsertCra} from '../models/InsertCra';
 import {CraWeekInsert} from '../models/craWeekInsert';
+import {AfterViewInit, OnInit} from '@angular/core';
 
 // TODO: Replace this with your own data model type
 export interface TableCraItem {
@@ -25,25 +26,37 @@ export class TableCraAdministration extends DataSource<CraWeekInsert> {
   data: CraWeekInsert[] = [];
   paginator: MatPaginator | undefined;
   sort: MatSort | undefined;
-
+  index!: string;
   constructor(private httpClient: HttpClient) {
     super();
-    this.fillListeCraWaiting();
+
+
+
   }
 
-  fillListeCraWaiting(){
-    const craHttp = new CraHttpDatabase(this.httpClient);
-    const response = craHttp.getCraWeekWaiting(2);
-    response.subscribe(reponse => {
-      if(reponse.status == 'OK'){
-        console.log(" --------" + reponse.listeCraWeek);
-        this.data = reponse.listeCraWeek;
-      }
-      else{
-        console.log("Erreur de requete de base de données");
-      }
-    });
+
+  setListe(liste:CraWeekInsert[] ){
+    this.data = liste;
+    this.paginator!._changePageSize(this.paginator!.pageSize);
+    // this.index = index;
+    // this.fillListeCraWaiting();
   }
+  //
+  // fillListeCraWaiting(){
+  //   const craHttp = new CraHttpDatabase(this.httpClient);
+  //   console.log("ppppppppppppppppppppppppppppppppppppp" + this.index);
+  //   const response = craHttp.getCraWeekWaiting(this.index);
+  //   response.subscribe(reponse => {
+  //     if(reponse.status == 'OK'){
+  //       console.log(" --------" + reponse.listeCraWeek);
+  //       this.data = reponse.listeCraWeek;
+  //       this.paginator!._changePageSize(this.paginator!.pageSize); // met à jour automatiquement
+  //     }
+  //     else{
+  //       console.log("Erreur de requete de base de données");
+  //     }
+  //   });
+  // }
 
   /**
    * Connect this data source to the table. The table will only update when
